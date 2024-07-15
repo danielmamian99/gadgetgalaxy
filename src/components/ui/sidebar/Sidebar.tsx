@@ -1,4 +1,5 @@
 'use client'
+import { useAuthModal } from '@/hooks/useAuthModal'
 import { useUIStore } from '@/store'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -8,17 +9,26 @@ import {
   IoCloseOutline,
   IoLogInOutline,
   IoLogOutOutline,
-  IoPeopleOutline,
   IoPersonOutline,
   IoSearchOutline,
   IoTicketOutline
 } from 'react-icons/io5'
+import { GoogleIcon } from '../components'
+import { CloseButton } from '../button/CloseButton'
+import { useBodyScrollLock } from '@/hooks'
 
 export const Sidebar = () => {
+  const isLogin = false
+  const { openAuthModal } = useAuthModal()
   const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen)
   const closeMenu = useUIStore((state) => state.closeSideMenu)
+  const onLogin = (e: React.MouseEvent<Element, MouseEvent>) => {
+    closeMenu()
+    openAuthModal(e)
+  }
+  useBodyScrollLock(isSideMenuOpen)
   return (
-    <div className=''>
+    <div className='text-base md:text-xl'>
       {isSideMenuOpen && (
         <div className='fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30' />
       )}
@@ -30,75 +40,60 @@ export const Sidebar = () => {
       )}
       <nav
         className={clsx(
-          'fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300',
+          'fixed p-5 right-0 top-0 w-[300px] md:w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300',
           {
             'translate-x-full': !isSideMenuOpen
           }
         )}
       >
-        <IoCloseOutline
-          onClick={() => closeMenu()}
-          size={50}
-          className='absolute top-5 right-5 cursor-pointer'
-        />
-        <div className='relative mt-14'>
-          <IoSearchOutline size={20} className='absolute top-2 left-2' />
-          <input
-            type='text'
-            placeholder='Buscar'
-            className='w-full bg-gray-50 rounded pl-10 py-1 pr-10 border-b-2 text-xl border-gray-200 focus:outline-none focus:border-blue-500'
-          />
-        </div>
+        <CloseButton className='absolute top-5 right-5' onClick={closeMenu} />
+
+        {isLogin && (
+          <Link
+            href='/'
+            onClick={closeMenu}
+            className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
+          >
+            <IoPersonOutline size={30} />
+            <span className='ml-3'> Perfil</span>
+          </Link>
+        )}
         <Link
           href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoPersonOutline size={30} />
-          <span className='ml-3 text-xl'> Perfil</span>
-        </Link>
-        <Link
-          href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoTicketOutline size={30} />
-          <span className='ml-3 text-xl'> Mis tableros de discusión </span>
-        </Link>
-        <Link
-          href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoLogInOutline size={30} />
-          <span className='ml-3 text-xl'> Ingresar</span>
-        </Link>
-        <Link
-          href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoLogOutOutline size={30} />
-          <span className='ml-3 text-xl'> Salir</span>
-        </Link>
-        <div className='w-full h-px bg-gray-200 my-10'></div>
-        <Link
-          href='/'
+          onClick={closeMenu}
           className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
         >
           <FcElectronics size={30} />
-          <span className='ml-3 text-xl'> Productos</span>
+          <span className='ml-3'> Productos</span>
         </Link>
         <Link
-          href='/'
+          href='/tableros-de-discusion'
+          onClick={closeMenu}
           className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
         >
           <IoTicketOutline size={30} />
-          <span className='ml-3 text-xl'> Ordenes</span>
+          <span className='ml-3'>Tableros de discusión </span>
         </Link>
-        <Link
-          href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoPeopleOutline size={30} />
-          <span className='ml-3 text-xl'> Usuarios</span>
-        </Link>
+
+        <div className='w-full h-px bg-gray-200 my-10'></div>
+        {isLogin ? (
+          <Link
+            href='/'
+            onClick={closeMenu}
+            className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
+          >
+            <IoLogOutOutline size={30} />
+            <span className='ml-3'> Salir</span>
+          </Link>
+        ) : (
+          <button
+            onClick={onLogin}
+            className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
+          >
+            <IoLogInOutline size={30} />
+            <span className='ml-3'> Ingresar</span>
+          </button>
+        )}
       </nav>
     </div>
   )

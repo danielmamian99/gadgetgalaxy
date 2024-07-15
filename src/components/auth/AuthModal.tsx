@@ -5,6 +5,7 @@ import { GoogleIcon } from '../ui/components'
 import { LoginBody } from './LoginBody'
 import { RegisterBody } from './RegisterBody'
 import { useAuthModal } from '@/hooks/useAuthModal'
+import { CloseButton } from '../ui/button/CloseButton'
 
 export const AuthModal = () => {
   const { closeAuthModal, isAuthModalOpen } = useAuthModal()
@@ -19,13 +20,8 @@ export const AuthModal = () => {
       className='w-[340px]'
       isOpen={isAuthModalOpen}
     >
-      <Modal.Header className='w-full flex justify-end items-center pt-3 px-6 pb-1 border-b border-surface-strokes'>
-        <button
-          onClick={closeAuthModal}
-          className='w-12 h-12 flex justify-center items-center p-2'
-        >
-          <GoogleIcon className='font-semibold' name='close' />
-        </button>
+      <Modal.Header className='w-full flex justify-end items-center py-2 px-6 border-b border-surface-strokes'>
+        <CloseButton onClick={closeAuthModal} />
       </Modal.Header>
       <Modal.Body className='flex flex-col h-[526px] '>
         {isLogin ? (

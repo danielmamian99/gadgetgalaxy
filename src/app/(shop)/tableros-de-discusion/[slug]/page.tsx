@@ -17,7 +17,7 @@ export default function ({ params }: IProductPageProps) {
   }
   const { tableInfo, ownerInfo, comments } = product
   return (
-    <div className='flex flex-col gap-6 mt-10 p-6 bg-white rounded-xl'>
+    <div className='flex flex-col gap-6 my-6 p-6 bg-white rounded-xl'>
       <TableInfo ownerInfo={ownerInfo} tableInfo={tableInfo} />
       <CommentsGrid comments={comments} />
     </div>

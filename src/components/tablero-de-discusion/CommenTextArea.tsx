@@ -20,7 +20,7 @@ export const CommentTextArea = () => {
         placeholder='Añade un comentario'
         maxCharacters={800}
       />
-      <div className='absolute flex gap-1 right-0 -bottom-6'>
+      <div className='md:absolute mt-2 md:mt-0 flex gap-1 right-0 -bottom-6'>
         <Button
           onClick={onCancel}
           variant='secondary'

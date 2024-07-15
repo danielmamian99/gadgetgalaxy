@@ -18,13 +18,13 @@ export const Products = ({ dataComponents, token }: IProps) => {
   return (
     <>
       <div className='flex flex-col pb-6 gap-2'>
-        <div className='flex justify-between'>
+        <div className='flex flex-col md:flex-row justify-between'>
           <Title
             title='Tienda'
             subtitle='todos los productos'
             className='mb-2'
           />
-          <div className='flex flex-col gap-4 justify-end items-end mb-4'>
+          <div className='flex flex-col gap-4 md:justify-end md:items-end mb-4'>
             <p className='text-sm'>
               ¡Reúnete con personas de la comunidad para comprar productos al
               por mayor y reducir tus costos!

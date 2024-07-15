@@ -25,16 +25,19 @@ export const UserProfile = ({
     window.history.back()
   }
   return (
-    <div className='flex items-start gap-1'>
+    <div className='flex flex-col md:flex-row items-start gap-2 md:gap-1'>
       {showBackButton && (
         <button
           onClick={onBack}
-          className='rounded-full w-8 h-8 bg-primary flex items-center justify-center'
+          className='rounded-full min-w-8 min-h-8 bg-primary flex items-center justify-center'
         >
           <GoogleIcon className='text-white' name='arrow_back' />
         </button>
       )}
-      <Link className='flex items-start gap-1' href={`/perfil/${userInfo.id}`}>
+      <Link
+        className='flex items-start gap-1 w-full'
+        href={`/perfil/${userInfo.id}`}
+      >
         {userInfo?.photo ? (
           <img
             src={userInfo.photo}
@@ -48,16 +51,27 @@ export const UserProfile = ({
         )}
         <div
           className={composeClasses(
-            'flex items-center gap-1',
-            size === 'sm' ? 'text-sm' : 'text-xl font-semibold'
+            'flex flex-col md:flex-row md:items-center gap-1 ',
+            size === 'sm'
+              ? 'text-sm'
+              : 'text-xl font-semibold  max-w-[calc(100%-48px)]'
           )}
         >
-          <h2>{userInfo.name}</h2>
+          <h2 className='truncate'>{userInfo.name}</h2>
           {date && (
             <>
               {' '}
-              <div>•</div>
-              <p className=' text-secondary line'>{date}</p>
+              <div className='hidden md:block'>•</div>
+              <p
+                className={composeClasses(
+                  ' text-secondary line whitespace-nowrap',
+                  size === 'sm'
+                    ? 'text-sm'
+                    : 'text-sm md:text-xl font-semibold  max-w-[calc(100%-48px)]'
+                )}
+              >
+                {date}
+              </p>
             </>
           )}
         </div>

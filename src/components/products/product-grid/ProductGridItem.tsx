@@ -57,6 +57,7 @@ export const ProductGridItem = ({ product }: IProps) => {
             type='link'
           />
           <Button
+            className='truncate'
             isDisabled={!url}
             href={url}
             size='sm'
@@ -95,7 +96,7 @@ export const ProductGridItem = ({ product }: IProps) => {
           onClick={() => setShowComunityButtons((prev) => !prev)}
           className='flex items-center w-full justify-between'
         >
-          <p>Únete a la comunidad y reduce costos</p>
+          <p className='truncate'>Únete a la comunidad y reduce costos</p>
           {showComunityButtons ? <SlArrowUp /> : <SlArrowDown />}
         </button>
         {showComunityButtons && (

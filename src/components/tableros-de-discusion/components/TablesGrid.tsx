@@ -7,7 +7,7 @@ interface IProps {
 }
 export const TablesGrid = ({ tables }: IProps) => {
   return (
-    <div className='w-full flex flex-col rounded-xl border border-surface-strokes bg-white'>
+    <div className='w-full flex flex-col rounded-xl border border-surface-strokes bg-white mb-6'>
       {tables.map((table, index) => (
         <>
           <TableItem table={table} />
