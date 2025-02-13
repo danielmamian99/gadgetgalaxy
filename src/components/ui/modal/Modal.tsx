@@ -77,7 +77,7 @@ export const Modal: FC<ModalProps> = ({
   inMobileFullHeight = false,
   isResponsive = true,
   buttomSheetClassName,
-  onClose
+  onClose,
 }) => {
   if (!isOpen) {
     return <></>

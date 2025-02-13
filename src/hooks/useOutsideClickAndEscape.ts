@@ -35,7 +35,7 @@ export const useOutsideClickAndEscape = ({
   ref,
   callback,
   closeOnEscape = true,
-  closeOnOutsideClick = true
+  closeOnOutsideClick = true,
 }: ClickOutsideAndEspaceOptions): void => {
   const handleClick = useCallback(
     (event: MouseEvent) => {

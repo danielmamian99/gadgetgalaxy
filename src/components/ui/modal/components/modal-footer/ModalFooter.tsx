@@ -24,7 +24,7 @@ export const _ModalFooter: FC<ModalFooterProps> = ({
   confirmOptions,
   resetOptions,
   className,
-  isShowDivider = true
+  isShowDivider = true,
 }) => {
   if (children) {
     return <footer className={className}>{children}</footer>

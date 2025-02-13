@@ -13,5 +13,5 @@ export const useUIStore = create<State>((set) => ({
   isSideMenuOpen: false,
   openSideMenu: () => set({ isSideMenuOpen: true }),
   closeSideMenu: () => set({ isSideMenuOpen: false }),
-  setIsAuthModalOpen: (isOpen: boolean) => set({ isAuthModalOpen: isOpen })
+  setIsAuthModalOpen: (isOpen: boolean) => set({ isAuthModalOpen: isOpen }),
 }))

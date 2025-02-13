@@ -14,7 +14,7 @@ export const CommentItem = ({ comment }: IProps) => {
         userInfo={{
           id: userOwner.id,
           name: userOwner.name,
-          photo: userOwner.photo
+          photo: userOwner.photo,
         }}
         date={comment.date}
       />

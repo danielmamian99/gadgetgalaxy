@@ -9,7 +9,7 @@ export const Pagination = ({
   defaultPage = 1,
   totalPages,
   value,
-  onPageChange
+  onPageChange,
 }: TablePaginationProps) => {
   const [currentPage, setCurrentPage] = useState<number>(defaultPage)
   const enableLastButton = currentPage < totalPages

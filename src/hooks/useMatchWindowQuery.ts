@@ -74,7 +74,7 @@ export const useMatchWindowQuery = () => {
     isMD,
     isLG,
     isXL,
-    isXXL
+    isXXL,
   }
 }
 

@@ -39,7 +39,7 @@ describe('Label Component', () => {
       <Label
         labelText={labelText}
         handleLabelClick={handleLabelClick}
-        name="test"
+        name='test'
       />
     )
     expect(getByLabelText(labelText)).toBeInTheDocument()
@@ -49,9 +49,9 @@ describe('Label Component', () => {
     const { getByLabelText } = render(
       <Label
         active={true}
-        labelText="Active Label"
+        labelText='Active Label'
         handleLabelClick={handleLabelClick}
-        name="test"
+        name='test'
       />
     )
     const label = getByLabelText('Active Label')
@@ -61,11 +61,11 @@ describe('Label Component', () => {
   it('should adjust position based on props', () => {
     const { getByLabelText } = render(
       <Label
-        leftIcon="phone"
-        type="phone-number"
-        labelText="Positioned Label"
+        leftIcon='phone'
+        type='phone-number'
+        labelText='Positioned Label'
         handleLabelClick={handleLabelClick}
-        name="test"
+        name='test'
       />
     )
     const label = getByLabelText('Positioned Label')
@@ -76,9 +76,9 @@ describe('Label Component', () => {
   it('should handle click event', () => {
     const { getByText } = render(
       <Label
-        labelText="Clickable Label"
+        labelText='Clickable Label'
         handleLabelClick={handleLabelClick}
-        name="test"
+        name='test'
       />
     )
     fireEvent.click(getByText('Clickable Label'))
@@ -88,10 +88,10 @@ describe('Label Component', () => {
   it('should display error state', () => {
     const { getByLabelText } = render(
       <Label
-        error="Error message"
-        labelText="Error Label"
+        error='Error message'
+        labelText='Error Label'
         handleLabelClick={handleLabelClick}
-        name="test"
+        name='test'
       />
     )
     const label = getByLabelText('Error Label')
@@ -102,9 +102,9 @@ describe('Label Component', () => {
     const { getByLabelText } = render(
       <Label
         disabled={true}
-        labelText="Disabled Label"
+        labelText='Disabled Label'
         handleLabelClick={handleLabelClick}
-        name="test"
+        name='test'
       />
     )
     const label = getByLabelText('Disabled Label')
@@ -114,10 +114,10 @@ describe('Label Component', () => {
   it('should adjust for placeholder presence', () => {
     const { getByLabelText } = render(
       <Label
-        placeholder="Placeholder"
-        labelText="Placeholder Label"
+        placeholder='Placeholder'
+        labelText='Placeholder Label'
         handleLabelClick={handleLabelClick}
-        name="test"
+        name='test'
       />
     )
     const label = getByLabelText('Placeholder Label')

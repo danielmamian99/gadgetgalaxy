@@ -14,7 +14,7 @@ export const LeftIcon: FC<LeftIconProps> = ({
   leftIcon,
   leftIconClass,
   type,
-  disabled
+  disabled,
 }) => {
   return (
     <span

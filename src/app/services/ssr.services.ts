@@ -18,12 +18,12 @@ export const getComponents = async ({ token, limit, offset }: IProps) => {
     console.log('response >>>', response)
     return {
       isSuccess: true,
-      data: response
+      data: response,
     }
   } catch (error) {
     return {
       isSuccess: false,
-      error
+      error,
     }
   }
 }
@@ -33,22 +33,22 @@ export const postLogin = async () => {
     const response = await fetch(`${URL}/login/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: 'smb123',
-        password: '1c2a7086d0c'
-      })
+        password: '1c2a7086d0c',
+      }),
     })
     const data = await response.json()
     return {
       isSuccess: true,
-      data: { ...data, status: response.status }
+      data: { ...data, status: response.status },
     }
   } catch (error) {
     return {
       isSuccess: false,
-      error
+      error,
     }
   }
 }

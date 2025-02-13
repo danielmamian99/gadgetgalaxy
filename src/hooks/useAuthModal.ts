@@ -3,7 +3,7 @@ import { useUIStore } from '@/store'
 export const useAuthModal = () => {
   const { isAuthModalOpen, setIsAuthModalOpen } = useUIStore((store) => ({
     isAuthModalOpen: store.isAuthModalOpen,
-    setIsAuthModalOpen: store.setIsAuthModalOpen
+    setIsAuthModalOpen: store.setIsAuthModalOpen,
   }))
 
   const openAuthModal = (e?: React.MouseEvent<Element, MouseEvent>) => {
@@ -20,6 +20,6 @@ export const useAuthModal = () => {
   return {
     isAuthModalOpen,
     openAuthModal,
-    closeAuthModal
+    closeAuthModal,
   }
 }

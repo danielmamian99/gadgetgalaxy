@@ -17,7 +17,7 @@ export const Profile = ({ user }: IProps) => {
           size='lg'
           date={user.date}
           userInfo={{
-            ...user
+            ...user,
           }}
           showBackButton
         />

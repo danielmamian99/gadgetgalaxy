@@ -33,12 +33,12 @@ export const useForm = (
     const { name, value } = target
     setFormState({
       ...formState,
-      [name]: stringNumberFormatToSimpleNumber(value)
+      [name]: stringNumberFormatToSimpleNumber(value),
     })
   }
   const onChangeValue = ({
     name,
-    value
+    value,
   }: {
     name: string
     value: string | number
@@ -70,6 +70,6 @@ export const useForm = (
     onResetForm,
     ...formValidation,
     formValidation,
-    isFormValid
+    isFormValid,
   }
 }

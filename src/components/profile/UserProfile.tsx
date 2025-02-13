@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import GoogleIcon from '../ui/components/GoogleIcon'
 import { composeClasses } from '@/app/utils'
+import { Avatar } from '../ui/avatar/Avatar'
 interface IProps {
   userInfo: IOwnerInfo
   date?: string
@@ -14,7 +15,7 @@ export const UserProfile = ({
   showBackButton,
   userInfo,
   date,
-  size = 'sm'
+  size = 'sm',
 }: IProps) => {
   const initials = (fullName: string) => {
     const names = fullName.split(' ')
@@ -38,17 +39,7 @@ export const UserProfile = ({
         className='flex items-start gap-1 w-full'
         href={`/perfil/${userInfo.id}`}
       >
-        {userInfo?.photo ? (
-          <img
-            src={userInfo.photo}
-            alt={userInfo.name}
-            className='w-8 h-8 rounded-full'
-          />
-        ) : (
-          <div className='w-[32px] h-[32px] rounded-full border-white shadow-md flex justify-center items-center text-sm font-bold'>
-            {initials(userInfo?.name ?? '')}
-          </div>
-        )}
+        <Avatar name={userInfo.name} avatarUrl={userInfo.photo} size={32} />
         <div
           className={composeClasses(
             'flex flex-col md:flex-row md:items-center gap-1 ',

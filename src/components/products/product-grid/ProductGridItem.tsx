@@ -53,18 +53,20 @@ export const ProductGridItem = ({ product }: IProps) => {
             isDisabled={!hasDatasheet}
             href={datasheetUrl}
             size='sm'
-            text={'Datasheet'}
             type='link'
-          />
+          >
+            Datasheet
+          </Button>
           <Button
             className='truncate'
             isDisabled={!url}
             href={url}
             size='sm'
-            text={url ? 'Ver producto' : 'No disponible'}
             type='link'
             variant='secondary'
-          />
+          >
+            {url ? 'Ver producto' : 'No disponible'}
+          </Button>
         </div>
       </div>
       <div className='w-full h-[1px] bg-surface-strokes'></div>
@@ -84,10 +86,11 @@ export const ProductGridItem = ({ product }: IProps) => {
               isDisabled={!hasProveedorUrl}
               href={proveedor.url}
               size='sm'
-              text={hasProveedorUrl ? 'Página del proveedor' : 'No disponible'}
               type='link'
               variant='secondary'
-            />
+            >
+              {hasProveedorUrl ? 'Página del proveedor' : 'No disponible'}
+            </Button>
           </>
         )}
       </div>
@@ -113,9 +116,10 @@ export const ProductGridItem = ({ product }: IProps) => {
                 onClick={openAuthModal}
                 isDisabled={!url}
                 size='sm'
-                text={'Crear tablero de discusión'}
                 variant='secondary'
-              />
+              >
+                Crear tablero de discusión
+              </Button>
             </div>
           </>
         )}

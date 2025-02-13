@@ -12,8 +12,9 @@ interface IProps {
   token: string
 }
 export const Products = ({ dataComponents, token }: IProps) => {
+  console.log('dataComponents >>>', dataComponents)
   const { formState, onInputTextChange } = useForm({
-    search: ''
+    search: '',
   })
   return (
     <>

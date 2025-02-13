@@ -5,7 +5,7 @@ import {
   InputHTMLAttributes,
   RefObject,
   useCallback,
-  useMemo
+  useMemo,
 } from 'react'
 import { InputProps } from '../../Input'
 import { composeClasses } from '@/app/utils'
@@ -53,7 +53,7 @@ export const InputField: FC<InputFieldProps> = ({
   className,
   hideLabel,
   height = 'h-[3.25rem]',
-  onBlur
+  onBlur,
 }) => {
   const currentInputMode = useMemo(() => {
     if (inputMode) {

@@ -8,7 +8,7 @@ export interface ConditionalPortalWrapperProps {
 
 export const ConditionalPortalWrapper = ({
   children,
-  isPortal
+  isPortal,
 }: ConditionalPortalWrapperProps) => {
   if (isPortal) {
     return <Portal>{children}</Portal>

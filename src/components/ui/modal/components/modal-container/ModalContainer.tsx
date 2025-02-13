@@ -5,7 +5,7 @@ import { composeClasses } from '@/app/utils'
 import {
   useBodyScrollLock,
   useMatchWindowQuery,
-  useOutsideClickAndEscape
+  useOutsideClickAndEscape,
 } from '@/hooks'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 
@@ -36,7 +36,7 @@ export const _ModalContainer: FC<ModalContainerProps> = ({
   isBlockBodyScroll,
   isResponsive,
   inMobileFullHeight,
-  mobileClassName
+  mobileClassName,
 }) => {
   const { isMD } = useMatchWindowQuery()
   const { onClose } = useModalContext()
@@ -47,7 +47,7 @@ export const _ModalContainer: FC<ModalContainerProps> = ({
     callback: onClose,
     closeOnEscape,
     closeOnOutsideClick,
-    ref: containerModalRef
+    ref: containerModalRef,
   })
 
   useBodyScrollLock(isMD ? isBlockBodyScroll : false)
@@ -85,7 +85,7 @@ export const _ModalContainer: FC<ModalContainerProps> = ({
       className={mobileClassName}
       scrollLocking={isBlockBodyScroll}
       {...(inMobileFullHeight && {
-        snapPoints: ({ maxHeight }: { maxHeight: number }) => [maxHeight]
+        snapPoints: ({ maxHeight }: { maxHeight: number }) => [maxHeight],
       })}
     >
       {children}

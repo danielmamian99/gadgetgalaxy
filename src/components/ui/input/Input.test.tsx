@@ -6,7 +6,7 @@ import Input from './Input'
 describe('Input', () => {
   it('should render the input field with the correct label', () => {
     const { getByLabelText } = render(
-      <Input name="test" labelText="Username" />
+      <Input name='test' labelText='Username' />
     )
     const input = getByLabelText('Username')
     expect(input).toBeDefined()
@@ -15,7 +15,7 @@ describe('Input', () => {
   it('should call the onChange callback when the input value changes', () => {
     const onChange = vi.fn()
     const { getByLabelText } = render(
-      <Input name="Username" onChange={onChange} />
+      <Input name='Username' onChange={onChange} />
     )
     const input = getByLabelText('Username')
     fireEvent.change(input, { target: { value: 'test' } })
@@ -24,33 +24,33 @@ describe('Input', () => {
 
   it('should render an error message if the input value is invalid', () => {
     const { getByText } = render(
-      <Input name="test" error="This is an invalid value" />
+      <Input name='test' error='This is an invalid value' />
     )
     expect(getByText('This is an invalid value')).toBeTruthy()
   })
 
   it('should render an informative message under input', () => {
     const { getByText } = render(
-      <Input name="test" information="information text" />
+      <Input name='test' information='information text' />
     )
     expect(getByText('information text')).toBeTruthy()
   })
 
   it('should render an placeholder message into input', () => {
-    render(<Input name="test" placeholder="placeholder text" />)
+    render(<Input name='test' placeholder='placeholder text' />)
     expect(screen.queryByPlaceholderText('placeholder text')).toBeTruthy()
   })
 
   it('should render a righticon into input', () => {
     const { getByText } = render(
-      <Input name="test" information="information text" rightIcon="cancel" />
+      <Input name='test' information='information text' rightIcon='cancel' />
     )
     expect(getByText('cancel')).toBeTruthy()
   })
 
   it('should render a right text into input', () => {
     const { getByText } = render(
-      <Input name="test" information="information text" rightText="USD" />
+      <Input name='test' information='information text' rightText='USD' />
     )
     expect(getByText('USD')).toBeTruthy()
   })
@@ -58,10 +58,10 @@ describe('Input', () => {
   it('should render a right text and icon into input', () => {
     const { getByText } = render(
       <Input
-        name="test"
-        information="information text"
-        rightText="USD"
-        rightIcon="cancel"
+        name='test'
+        information='information text'
+        rightText='USD'
+        rightIcon='cancel'
       />
     )
     expect(getByText('USD')).toBeTruthy()
@@ -70,7 +70,7 @@ describe('Input', () => {
 
   it('should render a left icon into input', () => {
     const { getByText } = render(
-      <Input name="test" information="information text" leftIcon="search" />
+      <Input name='test' information='information text' leftIcon='search' />
     )
     expect(getByText('search')).toBeTruthy()
   })
@@ -78,11 +78,11 @@ describe('Input', () => {
   it('should render a left icon, right icon and right text into input', () => {
     const { getByText } = render(
       <Input
-        name="test"
-        information="information text"
-        rightIcon="cancel"
-        leftIcon="search"
-        rightText="USD"
+        name='test'
+        information='information text'
+        rightIcon='cancel'
+        leftIcon='search'
+        rightText='USD'
       />
     )
     expect(getByText('search')).toBeTruthy()
@@ -91,7 +91,7 @@ describe('Input', () => {
   })
 
   it('should render a disabled input', () => {
-    const { getByLabelText } = render(<Input name="test" disabled />)
+    const { getByLabelText } = render(<Input name='test' disabled />)
     const input = getByLabelText('test') as HTMLInputElement
     expect(input.disabled).toBeTruthy()
   })
@@ -100,9 +100,9 @@ describe('Input', () => {
     const onRightIconClick = vi.fn()
     const { getByText } = render(
       <Input
-        name="Username"
+        name='Username'
         onRightIconClick={onRightIconClick}
-        rightIcon="cancel"
+        rightIcon='cancel'
       />
     )
     const icon = getByText('cancel')
@@ -113,14 +113,14 @@ describe('Input', () => {
 
   it('should call the getRef callback when the input was mounted', () => {
     const getRef = vi.fn()
-    render(<Input name="Username" getRef={getRef} rightIcon="cancel" />)
+    render(<Input name='Username' getRef={getRef} rightIcon='cancel' />)
 
     expect(getRef).toBeCalled()
   })
 
   it('should call the getRef callback when the input was mounted', () => {
     const { getByText, getByLabelText } = render(
-      <Input name="Username" labelText="labelText" />
+      <Input name='Username' labelText='labelText' />
     )
     const label = getByText('labelText')
 

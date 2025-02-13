@@ -6,12 +6,10 @@ import Link from 'next/link'
 import React from 'react'
 import { FcElectronics } from 'react-icons/fc'
 import {
-  IoCloseOutline,
   IoLogInOutline,
   IoLogOutOutline,
   IoPersonOutline,
-  IoSearchOutline,
-  IoTicketOutline
+  IoTicketOutline,
 } from 'react-icons/io5'
 import { GoogleIcon } from '../components'
 import { CloseButton } from '../button/CloseButton'
@@ -30,7 +28,7 @@ export const Sidebar = () => {
   return (
     <div className='text-base md:text-xl'>
       {isSideMenuOpen && (
-        <div className='fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30' />
+        <div className='fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30 text-8xl' />
       )}
       {isSideMenuOpen && (
         <div
@@ -42,10 +40,21 @@ export const Sidebar = () => {
         className={clsx(
           'fixed p-5 right-0 top-0 w-[300px] md:w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300',
           {
-            'translate-x-full': !isSideMenuOpen
+            'translate-x-full': !isSideMenuOpen,
           }
         )}
       >
+        <div
+          style={{
+            borderRadius: '100%',
+            backgroundImage: `url('/imgs/gadgetlogo1.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            height: '32px',
+            width: '32px',
+          }}
+        />
+
         <CloseButton className='absolute top-5 right-5' onClick={closeMenu} />
 
         {isLogin && (

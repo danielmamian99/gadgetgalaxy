@@ -3,11 +3,16 @@
 const { DATABASE_URL = '' } = process.env
 const nextConfig = {
   env: {
-    DATABASE_URL
+    DATABASE_URL,
   },
   images: {
-    domains: ['www.mouser.com', 'barcodes.conekta.com']
-  }
+    domains: [
+      'www.mouser.com',
+      'barcodes.conekta.com',
+      'lh3.googleusercontent.com',
+      'media.wiggot.mx',
+    ],
+  },
 }
 
 module.exports = nextConfig

@@ -17,7 +17,7 @@ export interface IComponent {
 }
 
 export enum EResultName {
-  Resistor = 'Resistor'
+  Resistor = 'Resistor',
 }
 
 export interface IProveedor {
@@ -30,13 +30,13 @@ export interface IProveedor {
 }
 
 export enum ECity {
-  Cali = 'cali'
+  Cali = 'cali',
 }
 
 export enum ECountry {
-  Colombia = 'Colombia'
+  Colombia = 'Colombia',
 }
 
 export enum EProveedorNombre {
-  Mouser = 'Mouser'
+  Mouser = 'Mouser',
 }

@@ -6,14 +6,14 @@ import dynamic from 'next/dynamic'
 //   ssr: false
 // })
 const TopMenu = dynamic(() => import('@/components/ui/top-menu/TopMenu'), {
-  ssr: false
+  ssr: false,
 })
 const Sidebar = dynamic(() => import('@/components/ui/sidebar/Sidebar'), {
-  ssr: false
+  ssr: false,
 })
 
 export default function ShopLayout({
-  children
+  children,
 }: {
   children: React.ReactNode
 }) {

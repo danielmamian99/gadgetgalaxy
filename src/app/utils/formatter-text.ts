@@ -12,7 +12,7 @@ export const formatPhoneNumber = (inputValue: string) => {
   const parts = [
     phoneNumberOnlyDigits?.slice(0, 3),
     phoneNumberOnlyDigits?.slice(3, 6),
-    phoneNumberOnlyDigits?.slice(6, 10)
+    phoneNumberOnlyDigits?.slice(6, 10),
   ]
 
   const formattedPhoneNumber = parts

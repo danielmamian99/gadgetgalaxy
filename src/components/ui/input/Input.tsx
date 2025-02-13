@@ -9,7 +9,7 @@ import {
   useState,
   RefObject,
   ReactNode,
-  MouseEvent
+  MouseEvent,
 } from 'react'
 import {
   InfoLabel,
@@ -17,7 +17,7 @@ import {
   Label,
   LeftIcon,
   RightIcon,
-  RightText
+  RightText,
 } from './components'
 import { composeClasses, formatPhoneNumber } from '@/app/utils'
 
@@ -104,7 +104,7 @@ export const Input = forwardRef(
       height = '',
       labelPosition = {
         top: 16,
-        left: 16
+        left: 16,
       },
       hideLabel = false,
       onBlur,

@@ -27,14 +27,14 @@ const assignedBorderColor: { [key: string]: string } = {
   secondary: 'border-white',
   terciary: 'border-primary',
   link: 'border-primary',
-  cancel: 'border-white'
+  cancel: 'border-white',
 }
 
 export const Spinner: FC<SpinnerProps> = ({
   className = '',
   customBorderColor,
   color = 'primary',
-  style
+  style,
 }) => {
   const colorAssigned = customBorderColor ?? assignedBorderColor[color]
 

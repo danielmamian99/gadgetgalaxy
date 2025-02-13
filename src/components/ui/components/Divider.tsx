@@ -13,7 +13,7 @@ export const Divider = ({
   isVertical,
   color = 'bg-surface-strokes',
   height,
-  width
+  width,
 }: DividerProps) => {
   if (isVertical) {
     return (
@@ -23,7 +23,7 @@ export const Divider = ({
         className={composeClasses(className, color)}
         style={{
           height: height ?? '100%',
-          width: width ?? 2
+          width: width ?? 2,
         }}
       />
     )
@@ -36,7 +36,7 @@ export const Divider = ({
       className={composeClasses(className, color)}
       style={{
         height: height ?? 2,
-        width: width ?? '100%'
+        width: width ?? '100%',
       }}
     />
   )

@@ -14,7 +14,7 @@ export const InfoLabel: FC<InfoLabelProps> = ({
   error,
   informationIcon,
   disabled,
-  informationIconClass
+  informationIconClass,
 }) => {
   return (
     <div

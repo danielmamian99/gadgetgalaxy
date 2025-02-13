@@ -5,7 +5,7 @@ import {
   Placement,
   inline,
   flip,
-  shift
+  shift,
 } from '@floating-ui/react-dom'
 import { composeClasses } from '@/app/utils'
 
@@ -25,13 +25,13 @@ export const Tooltip = ({
   leftIcon,
   placement,
   rightIcon,
-  tooltipClassName
+  tooltipClassName,
 }: ITooltipProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const { refs, floatingStyles } = useFloating({
     whileElementsMounted: autoUpdate,
     middleware: [inline(), flip(), shift()],
-    placement
+    placement,
   })
   const handleMouseEnter = useCallback(() => {
     setIsOpen(true)

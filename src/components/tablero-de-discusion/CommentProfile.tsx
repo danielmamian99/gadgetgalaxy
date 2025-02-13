@@ -3,8 +3,8 @@ import { IOwnerInfo } from '@/seed/seed'
 import Link from 'next/link'
 import React from 'react'
 import GoogleIcon from '../ui/components/GoogleIcon'
-import { TextArea } from '../ui/components'
-import { CommentTextArea } from './CommenTextArea'
+import Image from 'next/image'
+import { Avatar } from '../ui/avatar/Avatar'
 interface IProps {
   userInfo: IOwnerInfo
   date?: string
@@ -30,17 +30,7 @@ export const CommentProfile = ({ showBackButton, userInfo, date }: IProps) => {
         </button>
       )}
       <Link className='flex items-start gap-1' href={`/perfil/${userInfo.id}`}>
-        {userInfo?.photo ? (
-          <img
-            src={userInfo.photo}
-            alt={userInfo.name}
-            className='w-8 h-8 rounded-full'
-          />
-        ) : (
-          <div className='w-[32px] h-[32px] rounded-full border-white shadow-md flex justify-center items-center text-sm font-bold'>
-            {initials(userInfo?.name ?? '')}
-          </div>
-        )}
+        <Avatar name={userInfo.name} avatarUrl={userInfo.photo} />
         <div className='flex items-center gap-1'>
           <h2 className='text-sm'>{userInfo.name}</h2>
           {date && (

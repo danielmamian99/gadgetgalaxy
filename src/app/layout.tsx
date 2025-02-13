@@ -4,7 +4,6 @@ import './globals.css'
 
 export const meta = {
   siteName: 'Gadgetgalaxy',
-
   title: 'Gaget Galaxy | Marketplace',
   description:
     'Pertenece al marketplace de productos electrónicos más grande de latinoamérica',
@@ -21,14 +20,14 @@ export const meta = {
     images: [
       {
         url: '/logo.jpg',
-        alt: 'Wiggot'
-      }
-    ]
-  }
+        alt: 'Wiggot',
+      },
+    ],
+  },
 }
 
 export default function RootLayout({
-  children
+  children,
 }: {
   children: React.ReactNode
 }) {

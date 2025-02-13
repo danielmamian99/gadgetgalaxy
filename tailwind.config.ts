@@ -15,6 +15,9 @@ const config: Config = {
       },
       colors: {
         'notif-red': '#EA5858',
+        'notif-green': '#9dcf12',
+        'notif-green-01': '#97cc041a',
+        'surface-dark': '#222222',
         'surface-strokes': '#EBEDF0',
         'surface-gray-10': '#F4F7FA',
         // texts

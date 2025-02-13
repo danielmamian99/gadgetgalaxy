@@ -23,14 +23,14 @@ export const fetchServerAuth = async (
     ...options,
     headers: {
       ...options?.headers,
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   })
   const data = await res?.json()
 
   return {
     data: data ? snakeToCamel(data) : res,
     status: res?.status,
-    isError: !res?.ok
+    isError: !res?.ok,
   }
 }

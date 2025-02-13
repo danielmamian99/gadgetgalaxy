@@ -3,21 +3,20 @@ import { Button } from '@/components'
 import Input from '@/components/ui/input'
 import { titleFont } from '@/config/fonts'
 import { useForm } from '@/hooks/useForm'
-import Link from 'next/link'
 import { useState } from 'react'
 const INITIAL_FORM = {
   email: '',
-  password: ''
+  password: '',
 }
 const FORM_VALIDATIONS = {
   email: [
     (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-    'El correo no es válido'
+    'El correo no es válido',
   ],
   password: [
     (password: string) => password.length > 0,
-    'La contraseña es obligatoria'
-  ]
+    'La contraseña es obligatoria',
+  ],
 }
 interface IProps {
   onGoToRegister: () => void
@@ -32,7 +31,7 @@ export const LoginBody = ({ onGoToRegister }: IProps) => {
   const onSubmit = () => {
     setShowErrors(true)
     if (isFormValid) {
-      console.log('ingreso')
+      console.log('ingreso >>>')
     }
   }
   const onClick = (e: React.MouseEvent<Element, MouseEvent>) => {
@@ -40,7 +39,7 @@ export const LoginBody = ({ onGoToRegister }: IProps) => {
     onGoToRegister()
   }
   return (
-    <div className='flex flex-col gap-3 bg-white rounded-lg justify-between h-full'>
+    <div className='flex flex-col gap-3 bg-white rounded-lg justify-between h-full w-full'>
       <div className='flex flex-col gap-3'>
         <h1 className={`${titleFont.className} text-4xl mb-5`}>Ingresar</h1>
         <Input
@@ -64,12 +63,14 @@ export const LoginBody = ({ onGoToRegister }: IProps) => {
       </div>
       <div className='flex flex-col'>
         <Button
+          isDisabled={!isFormValid}
           type='button'
           onClick={onSubmit}
           className='!py-2'
           size='md'
-          text='Ingresar'
-        />
+        >
+          Ingresar
+        </Button>
         <div className='flex items-center my-4'>
           <div className='flex-1 border-t border-gray-500'></div>
           <div className='px-2 text-gray-800'>O</div>

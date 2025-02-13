@@ -12,7 +12,7 @@ export const GoogleIcon: FC<GoogleIconProps> = ({
   name,
   variant = 'outlined',
   className,
-  ariaLabel
+  ariaLabel,
 }) => {
   return (
     <span

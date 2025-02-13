@@ -12,7 +12,7 @@ export const PaginationSection = ({ totalPages, token }: IProps) => {
     const response = await getComponents({
       token,
       limit: ITEMS_PER_PAGE,
-      offset: (newPage - 1) * ITEMS_PER_PAGE
+      offset: (newPage - 1) * ITEMS_PER_PAGE,
     })
     console.log('response >>>', response)
   }

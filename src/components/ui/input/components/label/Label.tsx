@@ -34,9 +34,9 @@ export const Label: FC<LabelProps> = ({
   className,
   position = {
     top: 16,
-    left: 16
+    left: 16,
   },
-  height
+  height,
 }) => {
   const { top, left } = position
 
@@ -54,7 +54,7 @@ export const Label: FC<LabelProps> = ({
 
     return {
       left: newLeft,
-      top: newTop
+      top: newTop,
     }
   }, [left, top, leftIcon, placeholder, type, active, value])
 
@@ -72,7 +72,7 @@ export const Label: FC<LabelProps> = ({
       )}
       style={{
         top: labelPosition.top,
-        left: labelPosition.left
+        left: labelPosition.left,
       }}
       onClick={handleLabelClick}
       aria-label={labelText}

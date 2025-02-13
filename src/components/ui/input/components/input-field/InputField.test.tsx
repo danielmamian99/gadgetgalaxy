@@ -14,11 +14,11 @@ describe('InputField Component', () => {
     const { getByTestId } = render(
       <InputField
         props={{}}
-        name="test-input"
-        value="Test"
+        name='test-input'
+        value='Test'
         inputRef={{ current: null }}
-        type="text"
-        placeholder="Enter text"
+        type='text'
+        placeholder='Enter text'
         handleActivation={mockHandleActivation}
         handleInputChange={mockHandleInputChange}
       />
@@ -32,10 +32,10 @@ describe('InputField Component', () => {
     const { getByTestId } = render(
       <InputField
         props={{}}
-        name="phone-number"
-        value=""
+        name='phone-number'
+        value=''
         inputRef={{ current: null }}
-        type="phone-number"
+        type='phone-number'
         handleActivation={mockHandleActivation}
         handleInputChange={mockHandleInputChange}
         onChange={mockOnChange}
@@ -52,10 +52,10 @@ describe('InputField Component', () => {
     const { getByTestId } = render(
       <InputField
         props={{}}
-        name="disabled-input"
-        value=""
+        name='disabled-input'
+        value=''
         inputRef={{ current: null }}
-        type="text"
+        type='text'
         disabled={true}
         handleActivation={mockHandleActivation}
         handleInputChange={mockHandleInputChange}
@@ -69,11 +69,11 @@ describe('InputField Component', () => {
     const { getByTestId } = render(
       <InputField
         props={{}}
-        name="error-input"
-        value=""
+        name='error-input'
+        value=''
         inputRef={{ current: null }}
-        type="text"
-        error="Error message"
+        type='text'
+        error='Error message'
         handleActivation={mockHandleActivation}
         handleInputChange={mockHandleInputChange}
       />
@@ -86,10 +86,10 @@ describe('InputField Component', () => {
     const { getByTestId } = render(
       <InputField
         props={{}}
-        name="blur-input"
-        value=""
+        name='blur-input'
+        value=''
         inputRef={{ current: null }}
-        type="text"
+        type='text'
         onBlur={mockOnBlur}
         handleActivation={mockHandleActivation}
         handleInputChange={mockHandleInputChange}

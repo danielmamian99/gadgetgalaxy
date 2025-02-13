@@ -6,14 +6,14 @@ describe('RightIcon Component', () => {
   afterEach(cleanup)
 
   it('should render with an icon', () => {
-    const { getByTestId } = render(<RightIcon rightIcon="settings" />)
+    const { getByTestId } = render(<RightIcon rightIcon='settings' />)
     expect(getByTestId('right-icon')).toHaveTextContent('settings')
   })
 
   it('should apply custom rightIconClass', () => {
     const customClass = 'text-red-500'
     const { getByTestId } = render(
-      <RightIcon rightIcon="settings" rightIconClass={customClass} />
+      <RightIcon rightIcon='settings' rightIconClass={customClass} />
     )
     const icon = getByTestId('right-icon')
     expect(icon.className).toContain(customClass)
@@ -25,13 +25,13 @@ describe('RightIcon Component', () => {
   })
 
   it('should apply disabled style', () => {
-    const { getByTestId } = render(<RightIcon rightIcon="settings" disabled />)
+    const { getByTestId } = render(<RightIcon rightIcon='settings' disabled />)
     const icon = getByTestId('right-icon')
     expect(icon.className).toContain('!text-button-primary-disabled')
   })
 
   it('should apply error style', () => {
-    const { getByTestId } = render(<RightIcon rightIcon="error" error />)
+    const { getByTestId } = render(<RightIcon rightIcon='error' error />)
     const icon = getByTestId('right-icon')
     expect(icon.className).toContain('!text-destructive')
   })
@@ -39,7 +39,7 @@ describe('RightIcon Component', () => {
   it('should handle onRightIconClick event', async () => {
     const onRightIconClick = vi.fn()
     const { getByTestId } = render(
-      <RightIcon rightIcon="settings" onRightIconClick={onRightIconClick} />
+      <RightIcon rightIcon='settings' onRightIconClick={onRightIconClick} />
     )
     fireEvent.click(getByTestId('right-icon'))
     expect(onRightIconClick).toHaveBeenCalledTimes(1)

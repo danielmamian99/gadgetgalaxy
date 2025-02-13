@@ -12,7 +12,7 @@ interface IProps {
 }
 export const TablesOfDiscussion = ({ data }: IProps) => {
   const { formState, onInputTextChange } = useForm({
-    search: ''
+    search: '',
   })
   return (
     <>

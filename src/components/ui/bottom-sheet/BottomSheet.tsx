@@ -2,7 +2,7 @@ import { composeClasses } from '@/app/utils'
 import { FC } from 'react'
 import {
   BottomSheet as BSComponent,
-  BottomSheetProps as BSProps
+  BottomSheetProps as BSProps,
 } from 'react-spring-bottom-sheet'
 
 // import 'react-spring-bottom-sheet/dist/style.css'

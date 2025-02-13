@@ -15,7 +15,7 @@ export const RightIcon: FC<RightIconProps> = ({
   rightIconClass,
   disabled,
   error,
-  onRightIconClick
+  onRightIconClick,
 }) => {
   const handleOnClick = (event: MouseEvent) => {
     event.preventDefault()

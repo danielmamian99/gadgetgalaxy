@@ -31,7 +31,7 @@ export const _ModalHeader: FC<ModalHeaderProps> = ({
   isShowDivider = true,
   isShowLeftChevron = false,
   onClickLeftChevron,
-  children
+  children,
 }) => {
   const { onClose } = useModalContext()
 
