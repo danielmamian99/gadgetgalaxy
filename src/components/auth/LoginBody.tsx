@@ -11,7 +11,6 @@ const INITIAL_FORM = {
   email: '',
   password: '',
 }
-
 const FORM_VALIDATIONS = {
   email: [
     (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
@@ -75,7 +74,6 @@ export const LoginBody = ({ onGoToRegister, closeAuthModal }: IProps) => {
     e.stopPropagation()
     onGoToRegister()
   }
-
   return (
     <div className='flex flex-col gap-3 bg-white rounded-lg justify-between h-full w-full'>
       <div className='flex flex-col gap-3'>

@@ -19,8 +19,6 @@ export const fetchServerAuth = async (
   token: string,
   options?: RequestInit
 ) => {
-  console.log(url, token)
-
   const res = await fetch(url, {
     ...options,
     headers: {

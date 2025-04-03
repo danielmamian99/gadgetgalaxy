@@ -25,9 +25,6 @@ export const UserProfile = ({
   const onBack = () => {
     window.history.back()
   }
-
-  console.log(userInfo, 'userInfo')
-
   return (
     <div className='flex flex-col md:flex-row items-start gap-2 md:gap-1'>
       {showBackButton && (

@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import { allTablesData } from '@/seed/seed'
 import { TablesOfDiscussion } from '@/components/tableros-de-discusion/TablesOfDiscussion'
