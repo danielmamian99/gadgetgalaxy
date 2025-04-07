@@ -1,19 +1,52 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Title } from '../ui/components'
 import { TablesGrid } from './components'
 import { PaginationSection } from '@/app/modules/category'
 import { IAllTablesData } from '@/seed/seed'
 import { useForm } from '@/hooks'
 import Input from '../ui/input'
+import debounce from '@/app/utils/debounced'
+import { getDiscussionBoards } from '@/app/services/ssr.services'
 
 interface IProps {
   data: IAllTablesData
 }
+
 export const TablesOfDiscussion = ({ data }: IProps) => {
+  const [tables, setTables] = useState(data.results)
   const { formState, onInputTextChange } = useForm({
     search: '',
   })
+
+  // Debounced function to fetch discussion boards
+  const fetchTables = useCallback(
+    debounce(async (query: string) => {
+      try {
+        const response = await getDiscussionBoards({
+          limit: 35, // Ajusta el límite según sea necesario
+          offset: 0,
+          query: query.trim() ? query : undefined, // Solo enviar query si no está vacío
+        })
+        if (response.isSuccess) {
+          setTables(response.data.data.results)
+        } else {
+          console.error('Error fetching discussion boards:', response.error)
+        }
+      } catch (error) {
+        console.error('Error fetching discussion boards:', error)
+      }
+    }, 500),
+    []
+  )
+
+  // Update search query and trigger debounced fetch
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    onInputTextChange(e) // Update form state
+    fetchTables(value) // Llama a fetchTables con el valor actual del input
+  }
+
   return (
     <>
       <Title
@@ -34,10 +67,10 @@ export const TablesOfDiscussion = ({ data }: IProps) => {
         labelText='Buscar tableros'
         leftIcon='search'
         value={formState.search}
-        onChange={onInputTextChange}
+        onChange={handleSearchChange}
         name='search'
       />
-      <TablesGrid tables={data.results} />
+      <TablesGrid tables={tables} />
       <PaginationSection token={''} totalPages={data.count} />
     </>
   )

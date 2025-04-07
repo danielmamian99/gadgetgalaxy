@@ -1,21 +1,53 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { ProductGrid, Title } from '@/components'
 import { LinkButtonNext } from '@/components/ui/button/LinkButtonNext'
 import Input from '../ui/input'
 import { PaginationSection } from '@/app/modules/category'
 import { IGadgetgalaxyComponents } from '@/interfaces'
 import { useForm } from '@/hooks'
+import debounce from '@/app/utils/debounced'
+import { getComponents } from '@/app/services/ssr.services'
 
 interface IProps {
   dataComponents: IGadgetgalaxyComponents
   token: string
 }
+
 export const Products = ({ dataComponents, token }: IProps) => {
-  console.log('dataComponents >>>', dataComponents)
+  const [products, setProducts] = useState(dataComponents.results)
   const { formState, onInputTextChange } = useForm({
     search: '',
   })
+
+  // Debounced function to fetch products using getComponents
+  const fetchProducts = useCallback(
+    debounce(async (query: string) => {
+      try {
+        const response = await getComponents({
+          limit: 35, // Puedes ajustar el límite según sea necesario
+          offset: 0,
+          query: query.trim() ? query : undefined, // Solo enviar query si no está vacío
+        })
+        if (response.isSuccess) {
+          setProducts(response.data.data.results)
+        } else {
+          console.error('Error fetching products:', response.error)
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      }
+    }, 500),
+    []
+  )
+
+  // Update search query and trigger debounced fetch
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    onInputTextChange(e) // Update form state
+    fetchProducts(value) // Llama a fetchProducts con el valor actual del input
+  }
+
   return (
     <>
       <div className='flex flex-col pb-6 gap-2'>
@@ -47,11 +79,11 @@ export const Products = ({ dataComponents, token }: IProps) => {
           labelText='Buscar Productos'
           leftIcon='search'
           value={formState.search}
-          onChange={onInputTextChange}
+          onChange={handleSearchChange}
           name='search'
         />
       </div>
-      <ProductGrid products={dataComponents.results} />
+      <ProductGrid products={products} />
       <PaginationSection token={token} totalPages={dataComponents.count} />
     </>
   )

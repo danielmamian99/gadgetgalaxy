@@ -13,6 +13,7 @@ export const TopMenu = () => {
   const { isLogin, user } = useAuthUser()
   const openSideMenu = useUIStore((state) => state.openSideMenu)
   const setIsAuthModalOpen = useUIStore((state) => state.setIsAuthModalOpen)
+  const openCreateBoardModal = useUIStore((state) => state.openCreateBoardModal)
 
   const path = usePathname()
   const getShowSection = () => {
@@ -60,6 +61,7 @@ export const TopMenu = () => {
           />
         </Link>
       </div>
+
       <div className='flex gap-2 items-center'>
         <button
           onClick={() => openSideMenu()}
@@ -67,12 +69,21 @@ export const TopMenu = () => {
         >
           Menú
         </button>
+        <Button
+          size='sm'
+          className='font-semibold hidden md:flex h-[42px]'
+          onClick={(e) => openCreateBoardModal()}
+        >
+          Crear tablero de discusión
+        </Button>
         {isLogin ? (
           <ButtonProfile user={user} />
         ) : (
           <Button
             size='sm'
-            className='font-semibold hidden md:flex h-[42px]'
+            //@ts-ignore
+            variant='outline'
+            className='font-semibold hidden md:flex h-[42px] border-gray-300 shadow hover:shadow-lg hover:border-gray-500 transition-all'
             onClick={(e) => {
               e.stopPropagation()
               setIsAuthModalOpen(true)

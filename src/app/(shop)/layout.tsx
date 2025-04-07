@@ -1,5 +1,6 @@
 'use client'
 import { AuthModal } from '@/components'
+import { CreateBoardModal } from '@/components/ui/SideDiscussionBoardsModal/SideDiscussionBoardsModal'
 import dynamic from 'next/dynamic'
 
 // const AuthModal = dynamic(() => import('@/components/auth/AuthModal'), {
@@ -21,6 +22,7 @@ export default function ShopLayout({
     <main lang='en' className='min-h-screen'>
       <div className='h-[53px]'></div>
       <AuthModal />
+      <CreateBoardModal />
       <TopMenu />
       <Sidebar />
       <div className='px-6 sm:px-10'>{children}</div>

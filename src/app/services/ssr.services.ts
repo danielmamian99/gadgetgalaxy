@@ -6,8 +6,16 @@ interface IProps {
   limit: number
   offset: number
 }
-export const getComponents = async ({ limit, offset }: IProps) => {
-  const componentsUrl = `${URL}/comp/search/`
+interface IProps {
+  limit: number
+  offset: number
+  query?: string
+}
+
+export const getComponents = async ({ limit, offset, query }: IProps) => {
+  const componentsUrl = `${URL}/comp/search/?limit=${limit}&offset=${offset}${
+    query?.trim() ? `&q=${encodeURIComponent(query)}` : ''
+  }`
   const providersUrl = `${URL}/providers/`
 
   try {
@@ -28,7 +36,7 @@ export const getComponents = async ({ limit, offset }: IProps) => {
       )
       return {
         ...component,
-        proveedor: provider || null, // Agrega los datos del provider o null si no se encuentra
+        proveedor: provider || null,
       }
     })
 
@@ -51,8 +59,28 @@ export const getComponents = async ({ limit, offset }: IProps) => {
   }
 }
 
-export const getDiscussionBoards = async ({ limit, offset }: IProps) => {
-  const url = `${URL}/discussion-board/search/?limit=${limit}&offset=${offset}`
+export const getDiscussionBoards = async ({ limit, offset, query }: IProps) => {
+  const url = `${URL}/discussion-board/search/?limit=${limit}&offset=${offset}${
+    query?.trim() ? `&q=${encodeURIComponent(query)}` : ''
+  }`
+
+  try {
+    const response = await fetchServer(url)
+    return {
+      isSuccess: true,
+      data: response,
+    }
+  } catch (error) {
+    console.error('Error fetching discussion boards:', error)
+    return {
+      isSuccess: false,
+      error,
+    }
+  }
+}
+
+export const getDiscussionBoardById = async (id: string) => {
+  const url = `${URL}/discussion-boards/${id}/`
   try {
     const response = await fetchServer(url)
     return {
@@ -66,8 +94,25 @@ export const getDiscussionBoards = async ({ limit, offset }: IProps) => {
     }
   }
 }
-export const getDiscussionBoardById = async (id: string) => {
-  const url = `${URL}/discussion-boards/${id}/`
+
+export const getUserById = async (id: string) => {
+  const url = `${URL}/users/${id}/`
+  try {
+    const response = await fetchServer(url)
+    return {
+      isSuccess: true,
+      data: response,
+    }
+  } catch (error) {
+    return {
+      isSuccess: false,
+      error,
+    }
+  }
+}
+
+export const getBoardsById = async (id: string) => {
+  const url = `${URL}/user-discussion-boards/${id}/`
   try {
     const response = await fetchServer(url)
     return {

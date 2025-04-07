@@ -27,12 +27,12 @@ export const Profile = ({ user }: IProps) => {
           <h1
             className={`${titleFont.className} antialiased text-3xl font-semibold`}
           >
-            Tableros de {user.name}
+            Tableros de {user.username}
           </h1>
-          <h3 className='text-base'>{`Tableros de discusión creados por ${user.name}`}</h3>
+          <h3 className='text-base'>{`Tableros de discusión creados por ${user.username}`}</h3>
         </div>
-        {user.tables ? (
-          <TablesGrid tables={user.tables} />
+        {user?.tables ? (
+          <TablesGrid tables={user?.tables} />
         ) : (
           <div>No hay tableros</div>
         )}

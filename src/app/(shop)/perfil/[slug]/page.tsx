@@ -1,4 +1,5 @@
 import { Profile } from '@/app/modules/profile/Profile'
+import { getBoardsById, getUserById } from '@/app/services'
 import { PageNotFound } from '@/components'
 import { usersProfile } from '@/seed/seed'
 
@@ -8,11 +9,18 @@ interface IProductPageProps {
   }
 }
 
-export default function ({ params }: IProductPageProps) {
+export default async function ({ params }: IProductPageProps) {
   const { slug } = params
-  const user = usersProfile.find((user) => user.id === slug)
-  if (!user) {
+
+  // Fetch de los datos del tablero de discusión
+  const { isSuccess, data: user } = await getUserById(slug)
+  const { isSuccess: isSuccesBosrds, data: boards } = await getBoardsById(slug)
+
+  if (!isSuccess || !user?.data) {
     return <PageNotFound />
   }
-  return <Profile user={user} />
+  if (!user.data) {
+    return <PageNotFound />
+  }
+  return <Profile user={{ ...user.data, tables: boards?.data || [] }} />
 }
