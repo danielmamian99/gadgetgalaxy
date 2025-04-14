@@ -29,3 +29,12 @@ export interface ITableData {
   ownerInfo: IUserOwnerTable
   comments: IComment[]
 }
+
+export interface ITableItem {
+  id: number
+  name: string
+  price: string
+  quantity: number
+  imageUrl: string
+  providerName: string
+}

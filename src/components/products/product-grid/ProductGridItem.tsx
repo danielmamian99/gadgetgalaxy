@@ -9,12 +9,14 @@ import { SlArrowDown, SlArrowUp } from 'react-icons/sl'
 import { capitalizeWords } from '@/app/utils'
 import { LinkButtonNext } from '@/components/ui/button/LinkButtonNext'
 import { useAuthModal } from '@/hooks/useAuthModal'
+import { useCreateDiscussionStore } from '@/store/creacion-tablero/creacion-tablero-store'
 
 interface IProps {
   product: IComponent
 }
 
 export const ProductGridItem = ({ product }: IProps) => {
+  const { addComponentToBoard } = useCreateDiscussionStore()
   const { openAuthModal } = useAuthModal()
   const [openProvider, setOpenProvider] = useState(false)
   const [showComunityButtons, setShowComunityButtons] = useState(false)
@@ -25,6 +27,16 @@ export const ProductGridItem = ({ product }: IProps) => {
     Boolean(proveedor) && proveedor.url && proveedor.url !== 'N/A'
   const { direccion, country, city, nombre: ProviderName } = proveedor
   const address = capitalizeWords(`${city}, ${country}, ${direccion}`)
+  const onAddComponent = () => {
+    addComponentToBoard({
+      id: product.id,
+      name: product.nombre,
+      price: product.precio,
+      quantity: 1,
+      imageUrl: product.imageUrl,
+      providerName: ProviderName,
+    })
+  }
   if (!imageUrl || imageUrl === 'N/A') return <></>
   return (
     <div
@@ -32,7 +44,7 @@ export const ProductGridItem = ({ product }: IProps) => {
         showComunityButtons || openProvider ? '' : 'max-h-[301px]'
       } `}
     >
-      <Link className='min-w-full max-h-full ' href={`/product/${referencia}`}>
+      <Link target='blank' className='min-w-full max-h-full ' href={url}>
         <Image
           src={imageUrl}
           alt={nombre}
@@ -42,7 +54,7 @@ export const ProductGridItem = ({ product }: IProps) => {
         />
       </Link>
       <div className='flex gap-1 w-full flex-col p-[10px]'>
-        <Link className='hover:text-blue-500' href={`/product/${referencia}`}>
+        <Link className='hover:text-blue-500' href={url}>
           <p>{nombre}</p>
           <p>{referencia}</p>
         </Link>
@@ -54,18 +66,12 @@ export const ProductGridItem = ({ product }: IProps) => {
             href={datasheetUrl}
             size='sm'
             type='link'
+            variant='secondary'
           >
             Datasheet
           </Button>
-          <Button
-            className='truncate'
-            isDisabled={!url}
-            href={url}
-            size='sm'
-            type='link'
-            variant='secondary'
-          >
-            {url ? 'Ver producto' : 'No disponible'}
+          <Button onClick={onAddComponent} className='truncate' size='sm'>
+            Agregar a tablero
           </Button>
         </div>
       </div>

@@ -2,18 +2,22 @@
 import React from 'react'
 import Link from 'next/link'
 import { titleFont } from '@/config/fonts'
-import { useUIStore } from '@/store'
+import { useCreateDiscussionStore, useUIStore } from '@/store'
 import { usePathname } from 'next/navigation'
 import { composeClasses } from '@/app/utils'
 import { Button } from '../button/Button'
 import { useAuthUser } from '@/hooks/useAuthUser'
 import { ButtonProfile } from './ButtonProfile'
+import { GoogleIcon } from '../components'
 
 export const TopMenu = () => {
   const { isLogin, user } = useAuthUser()
   const openSideMenu = useUIStore((state) => state.openSideMenu)
   const setIsAuthModalOpen = useUIStore((state) => state.setIsAuthModalOpen)
   const openCreateBoardModal = useUIStore((state) => state.openCreateBoardModal)
+  const selectedComponents = useCreateDiscussionStore(
+    (state) => state.selectedComponents
+  )
 
   const path = usePathname()
   const getShowSection = () => {
@@ -62,7 +66,19 @@ export const TopMenu = () => {
         </Link>
       </div>
 
-      <div className='flex gap-2 items-center'>
+      <div className='flex gap-1 md:gap-2 items-center'>
+        <Button
+          size='sm'
+          className='font-semibold flex md:hidden !p-2 !w-8 !h-8 relative'
+          onClick={(e) => openCreateBoardModal()}
+        >
+          <GoogleIcon className='text-xl' name='table' />
+          {selectedComponents.length > 0 && (
+            <div className='absolute top-0 right-0 rounded-full w-4 h-4 text-xs bg-notif-red'>
+              {selectedComponents.length}
+            </div>
+          )}
+        </Button>
         <button
           onClick={() => openSideMenu()}
           className='m-2 p-2 rounded-md transition-all hover:bg-gray-100 flex md:hidden'
@@ -71,17 +87,21 @@ export const TopMenu = () => {
         </button>
         <Button
           size='sm'
-          className='font-semibold hidden md:flex h-[42px]'
+          className='font-semibold hidden md:flex h-[42px] whitespace-nowrap relative'
           onClick={(e) => openCreateBoardModal()}
         >
           Crear tablero de discusión
+          {selectedComponents.length > 0 && (
+            <div className='absolute top-0 right-0 rounded-full w-5 h-5 bg-notif-red'>
+              {selectedComponents.length}
+            </div>
+          )}
         </Button>
         {isLogin ? (
           <ButtonProfile user={user} />
         ) : (
           <Button
             size='sm'
-            //@ts-ignore
             variant='outline'
             className='font-semibold hidden md:flex h-[42px] border-gray-300 shadow hover:shadow-lg hover:border-gray-500 transition-all'
             onClick={(e) => {

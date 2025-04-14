@@ -64,3 +64,14 @@ body {
 .btn-secondary {
   @apply bg-button-secondary hover:bg-button-secondary-hover text-black py-2 px-4 rounded transition-all;
 }
+
+.input-number-format::-webkit-outer-spin-button,
+.input-number-format::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-number-format {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

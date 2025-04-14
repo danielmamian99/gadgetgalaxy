@@ -6,6 +6,7 @@ export type ButtonVariant =
   | 'terciary'
   | 'link'
   | 'cancel'
+  | 'outline'
 interface IProps {
   children: React.ReactNode
   dataTestId?: string

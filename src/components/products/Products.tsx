@@ -1,13 +1,14 @@
 'use client'
-import React, { useState, useEffect, useCallback } from 'react'
-import { ProductGrid, Title } from '@/components'
+import React, { useState, useCallback } from 'react'
 import { LinkButtonNext } from '@/components/ui/button/LinkButtonNext'
 import Input from '../ui/input'
 import { PaginationSection } from '@/app/modules/category'
-import { IGadgetgalaxyComponents } from '@/interfaces'
-import { useForm } from '@/hooks'
+import { IGadgetgalaxyComponents } from '@/interfaces/product.interface'
+import { useForm } from '@/hooks/useForm'
 import debounce from '@/app/utils/debounced'
 import { getComponents } from '@/app/services/ssr.services'
+import { Title } from '../ui/components/Title'
+import { ProductGrid } from './product-grid/ProductGrid'
 
 interface IProps {
   dataComponents: IGadgetgalaxyComponents
@@ -47,7 +48,6 @@ export const Products = ({ dataComponents, token }: IProps) => {
     onInputTextChange(e) // Update form state
     fetchProducts(value) // Llama a fetchProducts con el valor actual del input
   }
-
   return (
     <>
       <div className='flex flex-col pb-6 gap-2'>
