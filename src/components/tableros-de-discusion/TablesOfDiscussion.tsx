@@ -3,22 +3,22 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Title } from '../ui/components'
 import { TablesGrid } from './components'
 import { PaginationSection } from '@/app/modules/category'
-import { IAllTablesData } from '@/seed/seed'
 import { useForm } from '@/hooks'
 import Input from '../ui/input'
 import debounce from '@/app/utils/debounced'
-import { getDiscussionBoards } from '@/app/services/ssr.services'
+import { IAllTablesDataResponse } from '@/interfaces/table.interface'
+import { getDiscussionBoards } from '@/app/services/boards.services'
 
 interface IProps {
-  data: IAllTablesData
+  data: IAllTablesDataResponse
+  page: number
 }
 
-export const TablesOfDiscussion = ({ data }: IProps) => {
+export const TablesOfDiscussion = ({ data, page }: IProps) => {
   const [tables, setTables] = useState(data.results)
   const { formState, onInputTextChange } = useForm({
     search: '',
   })
-
   // Debounced function to fetch discussion boards
   const fetchTables = useCallback(
     debounce(async (query: string) => {
@@ -29,7 +29,7 @@ export const TablesOfDiscussion = ({ data }: IProps) => {
           query: query.trim() ? query : undefined, // Solo enviar query si no está vacío
         })
         if (response.isSuccess) {
-          setTables(response.data.data.results)
+          setTables(response?.data?.data.results)
         } else {
           console.error('Error fetching discussion boards:', response.error)
         }
@@ -71,7 +71,7 @@ export const TablesOfDiscussion = ({ data }: IProps) => {
         name='search'
       />
       <TablesGrid tables={tables} />
-      <PaginationSection token={''} totalPages={data.count} />
+      <PaginationSection defaultPage={page} totalPages={data.count} />
     </>
   )
 }

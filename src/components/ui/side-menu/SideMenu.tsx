@@ -2,26 +2,33 @@
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { useUIStore } from '@/store'
 import Link from 'next/link'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { FcElectronics } from 'react-icons/fc'
 import {
   IoLogInOutline,
   IoLogOutOutline,
-  IoPersonOutline,
   IoTicketOutline,
 } from 'react-icons/io5'
 import { CloseButton } from '../button/CloseButton'
 import { useBodyScrollLock } from '@/hooks'
 import SidebarComponent from '../components/SidebarComponent'
+import useSession from '@/hooks/useSession'
+import { Divider } from '../components'
+import { Avatar } from '../avatar/Avatar'
+import { useAuthUser } from '@/hooks/useAuthUser'
 
-export const Sidebar = () => {
-  const isLogin = false
+export const SideMenu = () => {
+  const { clearUser } = useAuthUser()
+  const { isLogin, profile } = useSession()
   const { openAuthModal } = useAuthModal()
   const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen)
   const closeMenu = useUIStore((state) => state.closeSideMenu)
   const onLogin = (e: React.MouseEvent<Element, MouseEvent>) => {
     closeMenu()
     openAuthModal(e)
+  }
+  const onLogout = () => {
+    clearUser()
   }
   useBodyScrollLock(isSideMenuOpen)
   return (
@@ -48,14 +55,20 @@ export const Sidebar = () => {
       </div>
       <div className='flex flex-1 flex-col gap-4 py-4'>
         {isLogin && (
-          <Link
-            href='/'
-            onClick={closeMenu}
-            className='flex items-center p-2 hover:bg-gray-100 rounded transition-all '
-          >
-            <IoPersonOutline size={30} />
-            <span className='ml-3'> Perfil</span>
-          </Link>
+          <Fragment>
+            <Link
+              href={`/perfil/${profile?.id}`}
+              onClick={closeMenu}
+              className='flex items-center p-2 hover:bg-gray-100 rounded transition-all '
+            >
+              <Avatar
+                avatarUrl={profile?.photo}
+                name={profile?.username ?? 'G'}
+              />
+              <span className='ml-3'> {profile?.username}</span>
+            </Link>
+            <Divider className='!h-[1px]' />
+          </Fragment>
         )}
         <Link
           href='/'
@@ -78,11 +91,11 @@ export const Sidebar = () => {
         {isLogin ? (
           <Link
             href='/'
-            onClick={closeMenu}
+            onClick={onLogout}
             className='flex items-center hover:bg-gray-100 rounded transition-all '
           >
-            <IoLogOutOutline size={30} />
-            <span className='ml-3'> Salir</span>
+            <IoLogOutOutline className='text-notif-red' size={30} />
+            <span className='ml-3 text-notif-red'> Salir</span>
           </Link>
         ) : (
           <button
@@ -98,4 +111,4 @@ export const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default SideMenu

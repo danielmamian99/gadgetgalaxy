@@ -4,8 +4,9 @@ import Input from '@/components/ui/input'
 import { titleFont } from '@/config/fonts'
 import { useForm } from '@/hooks/useForm'
 import { useState } from 'react'
-import { postLogin } from '@/app/services'
+import { postLogin } from '@/app/services/login.services'
 import { useAuthUser } from '@/hooks/useAuthUser'
+import toast from '../ui/toast'
 
 const INITIAL_FORM = {
   email: '',
@@ -38,7 +39,8 @@ export const LoginBody = ({ onGoToRegister, closeAuthModal }: IProps) => {
   )
   const { email, password } = formState
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.MouseEvent<Element, MouseEvent>) => {
+    e.stopPropagation()
     setShowErrors(true)
     setErrorMessage(null)
 
@@ -46,26 +48,29 @@ export const LoginBody = ({ onGoToRegister, closeAuthModal }: IProps) => {
       setLoading(true)
       try {
         const { isSuccess, data } = await postLogin({
-          username: email,
+          email,
           password,
         })
 
         if (!isSuccess || !data || ![200, 201].includes(data.status)) {
-          setErrorMessage('Credenciales incorrectas. Inténtalo de nuevo.')
+          setErrorMessage('Credenciales incorrectas.')
+          toast({
+            type: 'error',
+            title: 'Credenciales incorrectas.',
+          })
           return
         }
-
-        console.log('Login exitoso:', data)
-        // Aquí puedes manejar el token o redirigir al usuario
-        // Por ejemplo: guardar el token en el localStorage
-
-        setUser(JSON.stringify(data.user), data.access_token)
+        setUser(data.user, data.access_token)
+        closeAuthModal()
       } catch (error) {
         console.error('Error en el inicio de sesión:', error)
+        toast({
+          type: 'error',
+          title: 'Error al iniciar sesión',
+        })
         setErrorMessage('Ocurrió un error. Inténtalo más tarde.')
       } finally {
         setLoading(false)
-        closeAuthModal()
       }
     }
   }

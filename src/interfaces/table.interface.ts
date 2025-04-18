@@ -1,27 +1,28 @@
 export interface ITableInfo {
   id: string
-  name: string
+  nombre: string
   description: string
-  date: string
   createdAt: string
 }
 export interface IAllTablesDataResponse {
   results: ITableInfo[]
   count: number
-  page: number
-  pageSize: number
+  next: string | null
+  previous: string | null
 }
 export interface IUserOwnerTable {
   date: string
   id: string
-  name: string
+  username: string
   photo?: string
 }
 export interface IComment {
   id: string
-  date: string
-  userOwner: IUserOwnerTable
-  comment: string
+  createdAt: string
+  updatedAt: string
+  author: IUserOwnerTable
+  content: string
+  discussionBoard: string
 }
 
 export interface ITableData {

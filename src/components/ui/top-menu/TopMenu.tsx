@@ -6,12 +6,14 @@ import { useCreateDiscussionStore, useUIStore } from '@/store'
 import { usePathname } from 'next/navigation'
 import { composeClasses } from '@/app/utils'
 import { Button } from '../button/Button'
-import { useAuthUser } from '@/hooks/useAuthUser'
 import { ButtonProfile } from './ButtonProfile'
 import { GoogleIcon } from '../components'
+import useSession from '@/hooks/useSession'
+import { useMatchWindowQuery } from '@/hooks'
 
 export const TopMenu = () => {
-  const { isLogin, user } = useAuthUser()
+  const { isMD } = useMatchWindowQuery()
+  const { isLogin, profile } = useSession()
   const openSideMenu = useUIStore((state) => state.openSideMenu)
   const setIsAuthModalOpen = useUIStore((state) => state.setIsAuthModalOpen)
   const openCreateBoardModal = useUIStore((state) => state.openCreateBoardModal)
@@ -83,7 +85,7 @@ export const TopMenu = () => {
           onClick={() => openSideMenu()}
           className='m-2 p-2 rounded-md transition-all hover:bg-gray-100 flex md:hidden'
         >
-          Menú
+          <GoogleIcon name='menu' />
         </button>
         <Button
           size='sm'
@@ -97,8 +99,8 @@ export const TopMenu = () => {
             </div>
           )}
         </Button>
-        {isLogin ? (
-          <ButtonProfile user={user} />
+        {isLogin && profile && isMD ? (
+          <ButtonProfile user={profile} />
         ) : (
           <Button
             size='sm'

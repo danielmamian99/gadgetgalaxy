@@ -1,5 +1,6 @@
 'use client'
 import { AuthModal } from '@/components'
+import { ToastProvider } from '@/components/ui/toast/toast-provider/ToastProvider'
 import dynamic from 'next/dynamic'
 
 // const AuthModal = dynamic(() => import('@/components/auth/AuthModal'), {
@@ -8,7 +9,7 @@ import dynamic from 'next/dynamic'
 const TopMenu = dynamic(() => import('@/components/ui/top-menu/TopMenu'), {
   ssr: false,
 })
-const Sidebar = dynamic(() => import('@/components/ui/sidebar/Sidebar'), {
+const Sidebar = dynamic(() => import('@/components/ui/side-menu/SideMenu'), {
   ssr: false,
 })
 const CreateTableDiscussion = dynamic(
@@ -28,6 +29,7 @@ export default function ShopLayout({
   return (
     <main lang='en' className='min-h-screen'>
       <div className='h-[53px]'></div>
+      <ToastProvider />
       <AuthModal />
       <CreateTableDiscussion />
       <TopMenu />

@@ -12,10 +12,10 @@ import { ProductGrid } from './product-grid/ProductGrid'
 
 interface IProps {
   dataComponents: IGadgetgalaxyComponents
-  token: string
+  page: number
 }
 
-export const Products = ({ dataComponents, token }: IProps) => {
+export const Products = ({ dataComponents, page }: IProps) => {
   const [products, setProducts] = useState(dataComponents.results)
   const { formState, onInputTextChange } = useForm({
     search: '',
@@ -31,7 +31,7 @@ export const Products = ({ dataComponents, token }: IProps) => {
           query: query.trim() ? query : undefined, // Solo enviar query si no está vacío
         })
         if (response.isSuccess) {
-          setProducts(response.data.data.results)
+          setProducts(response?.data?.data.results)
         } else {
           console.error('Error fetching products:', response.error)
         }
@@ -84,7 +84,7 @@ export const Products = ({ dataComponents, token }: IProps) => {
         />
       </div>
       <ProductGrid products={products} />
-      <PaginationSection token={token} totalPages={dataComponents.count} />
+      <PaginationSection defaultPage={page} totalPages={dataComponents.count} />
     </>
   )
 }

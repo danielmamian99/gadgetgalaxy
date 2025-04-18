@@ -1,49 +1,31 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import SidebarComponent from '../ui/components/SidebarComponent'
-import { useUIStore } from '@/store/ui/ui-store'
 import { CloseButton } from '../ui/button/CloseButton'
 import { Button } from '../ui/button/Button'
-import { useCreateDiscussionStore } from '@/store/creacion-tablero/creacion-tablero-store'
 import { TableItem } from './TableItem'
-import { useForm } from '@/hooks/useForm'
-import { useMatchWindowQuery } from '@/hooks/useMatchWindowQuery'
 import Input from '../ui/input/Input'
 import TextArea from '../ui/components/TextArea'
 import { TableItemMobile } from './TableItemMobile'
+import { useTableDiscussion } from './useTableDiscussion'
 
-const INITIAL_FORM = {
-  name: '',
-  description: '',
-}
-const FORM_VALIDATIONS = {
-  name: [(name: string) => name.length > 0, 'El nombre es obligatorio'],
-}
 export const CreateTableDiscussion = () => {
   const {
-    formValidation,
-    formState,
-    isFormValid,
-    onInputTextChange,
+    closeCreateBoardModal,
     onChangeValue,
-  } = useForm(INITIAL_FORM, FORM_VALIDATIONS)
-  const { isMD } = useMatchWindowQuery()
-  const [showErrors, setShowErrors] = useState(false)
-
-  const { name, description } = formState
-  const { selectedComponents } = useCreateDiscussionStore()
-  const isOpen = useUIStore((state) => state.isCreateBoardModalOpen)
-  const closeCreateBoardModal = useUIStore(
-    (state) => state.closeCreateBoardModal
-  )
-
-  const onSubmit = () => {
-    setShowErrors(true)
-    if (!isFormValid) {
-      return
-    }
-    console.log('Create tablero')
-  }
+    onInputTextChange,
+    onSubmit,
+    onClickAddComponent,
+    description,
+    formValidation,
+    isFormValid,
+    isLoading,
+    isMD,
+    isOpen,
+    name,
+    selectedComponents,
+    showErrors,
+  } = useTableDiscussion()
   return (
     <SidebarComponent
       className='flex flex-col'
@@ -88,6 +70,16 @@ export const CreateTableDiscussion = () => {
               <TableItemMobile key={component.id} item={component} />
             )
           )}
+          {(!selectedComponents || selectedComponents.length === 0) && (
+            <button
+              onClick={onClickAddComponent}
+              className='rounded-lg border border-dashed flex items-center justify-center w-full h-full min-h-[80px]'
+            >
+              <p className='text-sm text-secondary'>
+                Selecciona un componente para agregarlo al tablero
+              </p>
+            </button>
+          )}
         </div>
       </div>
       <div className='w-full px-6 border-t py-4'>
@@ -97,7 +89,7 @@ export const CreateTableDiscussion = () => {
           size='sm'
           className='font-semibold h-[42px]'
         >
-          Crear
+          {isLoading ? 'Cargando...' : 'Crear'}
         </Button>
       </div>
     </SidebarComponent>

@@ -5,8 +5,9 @@ import React from 'react'
 import GoogleIcon from '../ui/components/GoogleIcon'
 import { composeClasses } from '@/app/utils'
 import { Avatar } from '../ui/avatar/Avatar'
+import { IUser } from '@/interfaces/profile.interface'
 interface IProps {
-  userInfo: IOwnerInfo
+  userInfo: IUser
   date?: string
   showBackButton?: boolean
   size?: 'sm' | 'lg'

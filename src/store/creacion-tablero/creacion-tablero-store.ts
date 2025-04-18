@@ -3,6 +3,7 @@ import { create } from 'zustand'
 
 interface State {
   selectedComponents: ITableItem[]
+  setSelectedComponents: (components: ITableItem[]) => void
   addComponentToBoard: (component: ITableItem) => void
   updateComponentQuantity: (id: number, quantity: number) => void
   removeComponentFromBoard: (id: number) => void
@@ -10,6 +11,11 @@ interface State {
 
 export const useCreateDiscussionStore = create<State>((set) => ({
   selectedComponents: [],
+  setSelectedComponents: (components) =>
+    set((state) => ({
+      ...state,
+      selectedComponents: components,
+    })),
   addComponentToBoard: (component) =>
     set((state) => {
       const existingComponent = state.selectedComponents.find(

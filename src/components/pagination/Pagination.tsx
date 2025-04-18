@@ -3,18 +3,39 @@ import { TablePaginationProps } from './types'
 import { getPageNumbers } from './ultils'
 import { composeClasses } from '@/app/utils'
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl'
+import { useRouter } from 'next/navigation'
+import { useCallback, useTransition } from 'react'
 
 export const Pagination = ({
   className,
   defaultPage = 1,
   totalPages,
   value,
+  basePath = '',
+  prefetch = false,
   onPageChange,
 }: TablePaginationProps) => {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const [currentPage, setCurrentPage] = useState<number>(defaultPage)
   const enableLastButton = currentPage < totalPages
   const enableFirstButton = currentPage > 1
-
+  const handlePrefetch = useCallback(
+    (pageNumber: number) => {
+      // Iniciamos la transición para el prefetch
+      startTransition(() => {
+        // Prefetch de la página
+        router.prefetch(`${basePath}?page=${pageNumber}`)
+      })
+    },
+    [router, basePath]
+  )
+  const handleMouseEnter = useCallback(
+    (pageNumber: number) => {
+      handlePrefetch(pageNumber)
+    },
+    [handlePrefetch]
+  )
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     onPageChange(page)
@@ -36,6 +57,7 @@ export const Pagination = ({
         type='button'
         className='w-8 h-8 flex items-center justify-center rounded-full text-primary disabled:text-terciary'
         onClick={() => handlePageChange(currentPage - 1)}
+        onMouseEnter={() => handleMouseEnter(currentPage - 1)}
         disabled={!enableFirstButton}
       >
         <SlArrowLeft />
@@ -72,6 +94,7 @@ export const Pagination = ({
             onClick={() => {
               handlePageChange(pageNumber)
             }}
+            onMouseEnter={() => handleMouseEnter(pageNumber)}
           >
             {pageNumber}
           </button>
@@ -82,6 +105,7 @@ export const Pagination = ({
         type='button'
         className='w-8 h-8 flex items-center justify-center rounded-full text-primary disabled:text-terciary'
         onClick={() => handlePageChange(currentPage + 1)}
+        onMouseEnter={() => handleMouseEnter(currentPage - 1)}
         disabled={!enableLastButton}
       >
         <SlArrowRight />

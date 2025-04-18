@@ -6,16 +6,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button/Button'
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl'
-import { capitalizeWords } from '@/app/utils'
+import { capitalizeWords, composeClasses } from '@/app/utils'
 import { LinkButtonNext } from '@/components/ui/button/LinkButtonNext'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { useCreateDiscussionStore } from '@/store/creacion-tablero/creacion-tablero-store'
+import { useUIStore } from '@/store/ui/ui-store'
 
 interface IProps {
   product: IComponent
 }
 
 export const ProductGridItem = ({ product }: IProps) => {
+  const startAddBoardAnimation = useUIStore(
+    (state) => state.startAddBoardAnimation
+  )
   const { addComponentToBoard } = useCreateDiscussionStore()
   const { openAuthModal } = useAuthModal()
   const [openProvider, setOpenProvider] = useState(false)
@@ -25,7 +29,7 @@ export const ProductGridItem = ({ product }: IProps) => {
   const hasDatasheet = Boolean(datasheetUrl) && datasheetUrl !== 'N/A'
   const hasProveedorUrl =
     Boolean(proveedor) && proveedor.url && proveedor.url !== 'N/A'
-  const { direccion, country, city, nombre: ProviderName } = proveedor
+  const { direccion, country, city, nombre: ProviderName } = proveedor ?? {}
   const address = capitalizeWords(`${city}, ${country}, ${direccion}`)
   const onAddComponent = () => {
     addComponentToBoard({
@@ -70,7 +74,16 @@ export const ProductGridItem = ({ product }: IProps) => {
           >
             Datasheet
           </Button>
-          <Button onClick={onAddComponent} className='truncate' size='sm'>
+          <Button
+            onClick={onAddComponent}
+            className={composeClasses(
+              'truncate',
+              startAddBoardAnimation
+                ? 'brightness-100 animate-bounce duration-1000'
+                : ''
+            )}
+            size='sm'
+          >
             Agregar a tablero
           </Button>
         </div>

@@ -1,15 +1,12 @@
-import { IUser } from '@/seed/seed'
 import React from 'react'
 import { TablesGrid } from '@/components/tableros-de-discusion/components'
-import { Title } from '@/components'
-import { CommentProfile } from '@/components/tablero-de-discusion/CommentProfile'
 import { UserProfile } from '@/components/profile'
 import { titleFont } from '@/config/fonts'
+import { IUser } from '@/interfaces/profile.interface'
 interface IProps {
   user: IUser
 }
 export const Profile = ({ user }: IProps) => {
-  console.log('user >>>', user)
   return (
     <div className='flex flex-col pt-6 gap-10'>
       <div className='flex flex-col gap-3'>

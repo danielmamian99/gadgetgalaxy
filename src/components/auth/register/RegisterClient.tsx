@@ -3,11 +3,13 @@ import { Button } from '@/components'
 import Input from '@/components/ui/input'
 import { titleFont } from '@/config/fonts'
 import { useForm } from '@/hooks/useForm'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GoogleIcon } from '../../ui/components'
 import { composeClasses } from '@/app/utils'
 import Tooltip from '../../ui/tooltip'
 import { IRegister } from './RegisterBody'
+import { postRegister } from '@/app/services/login.services'
+import toast from '@/components/ui/toast'
 
 const FORM_VALIDATIONS = {
   email: [
@@ -34,6 +36,8 @@ export const RegisterClient = ({
 }: IProps) => {
   const { rol } = userFormData
   const [showErrors, setShowErrors] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [createAccountError, setCreateAccountError] = useState('')
   const [isStore, setIsStore] = useState(rol === 'store')
   const { formValidation, formState, isFormValid, onInputTextChange } = useForm(
     {
@@ -44,9 +48,9 @@ export const RegisterClient = ({
     FORM_VALIDATIONS
   )
   const { email, password, name } = formState
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setShowErrors(true)
-    if (!isFormValid) {
+    if (!isFormValid || createAccountError) {
       return
     }
     if (isStore) {
@@ -54,11 +58,32 @@ export const RegisterClient = ({
       onGoToRegisterStore()
       return
     }
+    setIsLoading(true)
+    const response = await postRegister({
+      email,
+      password,
+      username: name,
+      rol: 'cliente',
+    })
+    setIsLoading(false)
+    if (!response.isSuccess) {
+      setCreateAccountError(response.data.error)
+      return
+    }
+    toast({
+      type: 'success',
+      title: 'Cuenta creada con éxito',
+    })
     onGoToLogin()
   }
   const onClick = () => {
     onGoToLogin()
   }
+  useEffect(() => {
+    if (createAccountError) {
+      setCreateAccountError('')
+    }
+  }, [name, email, password])
 
   return (
     <div className='flex flex-col items-between justify-between bg-white rounded-lg h-full gap-3'>
@@ -149,8 +174,14 @@ export const RegisterClient = ({
           className='!py-2'
           size='md'
           isDisabled={!isFormValid}
+          variant={createAccountError ? 'cancel' : 'primary'}
         >
-          {isStore ? 'Continuar' : 'Crear cuenta'}
+          {isStore && !isLoading && !createAccountError && 'Continuar'}
+          {!isStore && !isLoading && !createAccountError && 'Crear cuenta'}
+          {isLoading && 'Cargando...'}
+          {createAccountError && (
+            <p className='text-white text-sm'>{createAccountError}</p>
+          )}
         </Button>
         <div className='flex items-center my-4'>
           <div className='flex-1 border-t border-gray-500'></div>

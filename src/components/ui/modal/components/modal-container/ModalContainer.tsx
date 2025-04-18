@@ -1,3 +1,4 @@
+'use client'
 import { FC, ReactNode, useRef } from 'react'
 import { ConditionalPortalWrapper } from './ConditionalPortalWrapper'
 import { useModalContext } from '../../hooks'

@@ -5,10 +5,6 @@ const URL = process.env.DATABASE_URL
 interface IProps {
   limit: number
   offset: number
-}
-interface IProps {
-  limit: number
-  offset: number
   query?: string
 }
 
@@ -59,42 +55,6 @@ export const getComponents = async ({ limit, offset, query }: IProps) => {
   }
 }
 
-export const getDiscussionBoards = async ({ limit, offset, query }: IProps) => {
-  const url = `${URL}/discussion-board/search/?limit=${limit}&offset=${offset}${
-    query?.trim() ? `&q=${encodeURIComponent(query)}` : ''
-  }`
-
-  try {
-    const response = await fetchServer(url)
-    return {
-      isSuccess: true,
-      data: response,
-    }
-  } catch (error) {
-    console.error('Error fetching discussion boards:', error)
-    return {
-      isSuccess: false,
-      error,
-    }
-  }
-}
-
-export const getDiscussionBoardById = async (id: string) => {
-  const url = `${URL}/discussion-boards/${id}/`
-  try {
-    const response = await fetchServer(url)
-    return {
-      isSuccess: true,
-      data: response,
-    }
-  } catch (error) {
-    return {
-      isSuccess: false,
-      error,
-    }
-  }
-}
-
 export const getUserById = async (id: string) => {
   const url = `${URL}/users/${id}/`
   try {
@@ -120,38 +80,6 @@ export const getBoardsById = async (id: string) => {
       data: response,
     }
   } catch (error) {
-    return {
-      isSuccess: false,
-      error,
-    }
-  }
-}
-export const postLogin = async ({
-  username,
-  password,
-}: {
-  username: string
-  password: string
-}) => {
-  try {
-    const response = await fetch(`${URL}/login/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-
-    const data = await response.json()
-    return {
-      isSuccess: response.ok,
-      data: { ...data, status: response.status },
-    }
-  } catch (error) {
-    console.error('Error during login:', error)
     return {
       isSuccess: false,
       error,

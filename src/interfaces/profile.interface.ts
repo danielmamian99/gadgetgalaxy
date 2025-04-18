@@ -5,7 +5,7 @@ export interface IUser {
   date: string
   email: string
   id: string
-  name: string
+  username: string
   photo?: string
   tables?: ITableInfo[]
 }

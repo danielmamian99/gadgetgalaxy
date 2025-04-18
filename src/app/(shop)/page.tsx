@@ -1,62 +1,53 @@
-'use client'
+import { getComponents } from '../services'
+import { Products } from '@/components/products/Products'
 
-import React, { useState, useEffect } from 'react'
-import { getComponents, postLogin } from '../services'
-import { Products } from '@/components/products'
+export const dynamic = 'force-dynamic'
+// O si prefieres usar ISR:
+export const revalidate = 0
+interface IProps {
+  searchParams: {
+    page?: string
+  }
+}
 
-export default function Home() {
-  const [dataComponents, setDataComponents] = useState<any>(null)
-  const [token, setToken] = useState<string | null>(null)
-  const [error, setError] = useState<boolean>(false)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        //  // Login and get token
-        //   const { isSuccess, data } = await postLogin()
-        //   if (
-        //     !isSuccess ||
-        //     !data ||
-        //     ![200, 201, 202, 203, 204].includes(data.status)
-        //   ) {
-        //     setError(true)
-        //     return
-        //   }
-        //   setToken(data.access_token)
-
-        // Fetch components
-        const { isSuccess: isSuccessComponents, data: componentsData } =
-          await getComponents({
-            limit: 35,
-            offset: 0,
-          })
-        if (
-          !isSuccessComponents ||
-          !componentsData ||
-          ![200, 201, 202, 203, 204].includes(componentsData.status)
-        ) {
-          setError(true)
-          return
-        }
-
-        setDataComponents(componentsData.data)
-      } catch (err) {
-        console.error('Error fetching data:', err)
-        setError(true)
-      }
+const fetchData = async (page: number) => {
+  const offset = (page - 1) * 35
+  const { isSuccess: isSuccessComponents, data: componentsData } =
+    await getComponents({
+      limit: 35,
+      offset,
+    })
+  if (
+    !isSuccessComponents ||
+    !componentsData ||
+    ![200, 201, 202, 203, 204].includes(componentsData.status)
+  ) {
+    return {
+      isSuccess: false,
+      error: `${!isSuccessComponents ? 'Error fetching components' : ''} ${
+        componentsData ? componentsData.status : 'Empty components'
+      }`,
     }
+  }
+  return {
+    isSuccess: true,
+    data: componentsData.data,
+  }
+}
 
-    fetchData()
-  }, []) // Empty dependency array ensures this runs only once on mount
+export default async function Home({ searchParams }: IProps) {
+  const { page: pageParams } = searchParams
+  const page = pageParams ? parseInt(pageParams) : 1
+  const { isSuccess, data, error } = await fetchData(page)
 
-  if (error) {
-    return <div>Error loading data</div>
+  if (error || !isSuccess) {
+    return <div>{error}</div>
   }
 
   return (
     <div>
-      {dataComponents ? (
-        <Products dataComponents={dataComponents} token={token} />
+      {data ? (
+        <Products page={page} dataComponents={data} />
       ) : (
         <div>Loading...</div>
       )}
