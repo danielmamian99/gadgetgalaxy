@@ -7,10 +7,12 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button/Button'
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl'
 import { capitalizeWords, composeClasses } from '@/app/utils'
-import { LinkButtonNext } from '@/components/ui/button/LinkButtonNext'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { useCreateDiscussionStore } from '@/store/creacion-tablero/creacion-tablero-store'
 import { useUIStore } from '@/store/ui/ui-store'
+import { PriceTable } from '@/components/price-table/PriceTable'
+import { parsePriceBreaks } from '@/helpers/strings'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface IProps {
   product: IComponent
@@ -20,12 +22,21 @@ export const ProductGridItem = ({ product }: IProps) => {
   const startAddBoardAnimation = useUIStore(
     (state) => state.startAddBoardAnimation
   )
-  const { addComponentToBoard } = useCreateDiscussionStore()
+  const { addComponentToBoard, selectedComponents } = useCreateDiscussionStore()
   const { openAuthModal } = useAuthModal()
   const [openProvider, setOpenProvider] = useState(false)
   const [showComunityButtons, setShowComunityButtons] = useState(false)
-  const { url, nombre, imageUrl, referencia, precio, datasheetUrl, proveedor } =
-    product
+  const {
+    url,
+    nombre,
+    imageUrl,
+    referencia,
+    precio,
+    datasheetUrl,
+    proveedor,
+    priceBreaks,
+  } = product
+  const priceBreaksArray = parsePriceBreaks(priceBreaks)
   const hasDatasheet = Boolean(datasheetUrl) && datasheetUrl !== 'N/A'
   const hasProveedorUrl =
     Boolean(proveedor) && proveedor.url && proveedor.url !== 'N/A'
@@ -39,14 +50,16 @@ export const ProductGridItem = ({ product }: IProps) => {
       quantity: 1,
       imageUrl: product.imageUrl,
       providerName: ProviderName,
+      priceBreaks: priceBreaksArray,
     })
   }
+  const isComponentInBoard = selectedComponents.find(
+    (component) => component.id === product.id
+  )
   if (!imageUrl || imageUrl === 'N/A') return <></>
   return (
     <div
-      className={`flex flex-col justify-between items-start rounded-xl overflow-hidden shadow-[0px_3px_6px_0px_rgba(34,34,34,0.16)] bg-white h-full w-full text-sm ${
-        showComunityButtons || openProvider ? '' : 'max-h-[301px]'
-      } `}
+      className={`flex flex-col justify-between items-start rounded-xl overflow-hidden shadow-[0px_3px_6px_0px_rgba(34,34,34,0.16)] bg-white h-full w-full text-sm max-h-[fit-content] `}
     >
       <Link target='blank' className='min-w-full max-h-full ' href={url}>
         <Image
@@ -74,18 +87,25 @@ export const ProductGridItem = ({ product }: IProps) => {
           >
             Datasheet
           </Button>
-          <Button
-            onClick={onAddComponent}
-            className={composeClasses(
-              'truncate',
-              startAddBoardAnimation
-                ? 'brightness-100 animate-bounce duration-1000'
-                : ''
+          <div className='relative'>
+            <Button
+              onClick={onAddComponent}
+              className={composeClasses(
+                'truncate',
+                startAddBoardAnimation
+                  ? 'brightness-100 animate-bounce duration-1000'
+                  : ''
+              )}
+              size='sm'
+            >
+              Agregar a tablero
+            </Button>
+            {isComponentInBoard && (
+              <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
+                {isComponentInBoard.quantity}
+              </div>
             )}
-            size='sm'
-          >
-            Agregar a tablero
-          </Button>
+          </div>
         </div>
       </div>
       <div className='w-full h-[1px] bg-surface-strokes'></div>
@@ -98,50 +118,52 @@ export const ProductGridItem = ({ product }: IProps) => {
           <p>Proveedor: {ProviderName} </p>
           {openProvider ? <SlArrowUp /> : <SlArrowDown />}
         </button>
-        {openProvider && (
-          <>
-            <p>{address}</p>
-            <Button
-              isDisabled={!hasProveedorUrl}
-              href={proveedor.url}
-              size='sm'
-              type='link'
-              variant='secondary'
+        <AnimatePresence initial={false}>
+          {openProvider && (
+            <motion.div
+              key='price-table'
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              style={{ overflow: 'hidden' }}
             >
-              {hasProveedorUrl ? 'Página del proveedor' : 'No disponible'}
-            </Button>
-          </>
-        )}
+              <p>{address}</p>
+              <Button
+                isDisabled={!hasProveedorUrl}
+                href={proveedor.url}
+                size='sm'
+                type='link'
+                variant='secondary'
+              >
+                {hasProveedorUrl ? 'Página del proveedor' : 'No disponible'}
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      <div className='flex flex-col p-[10px] gap-2 w-full border-t'>
+      <div className='flex flex-1 flex-col p-[10px] gap-2 w-full border-t'>
         <button
           onClick={() => setShowComunityButtons((prev) => !prev)}
           className='flex items-center w-full justify-between'
         >
-          <p className='truncate'>Únete a la comunidad y reduce costos</p>
+          <p className='truncate'>Tabla de precios</p>
           {showComunityButtons ? <SlArrowUp /> : <SlArrowDown />}
         </button>
-        {showComunityButtons && (
-          <>
-            <div className='flex flex-col gap-2'>
-              <p className='text-sm'>Acerca de este producto:</p>
-              <LinkButtonNext
-                className='flex items-center justify-center'
-                href='/tableros-de-discusion'
-              >
-                Ver tableros de discusión
-              </LinkButtonNext>
-              <Button
-                onClick={openAuthModal}
-                isDisabled={!url}
-                size='sm'
-                variant='secondary'
-              >
-                Crear tablero de discusión
-              </Button>
-            </div>
-          </>
-        )}
+        <AnimatePresence initial={false}>
+          {showComunityButtons && (
+            <motion.div
+              key='price-table'
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              style={{ overflow: 'hidden' }}
+            >
+              <PriceTable priceBreaks={priceBreaksArray} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )

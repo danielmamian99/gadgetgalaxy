@@ -9,6 +9,7 @@ import debounce from '@/app/utils/debounced'
 import { getComponents } from '@/app/services/ssr.services'
 import { Title } from '../ui/components/Title'
 import { ProductGrid } from './product-grid/ProductGrid'
+import { ProductGridSekeleton } from './product-grid/ProductGridSekeleton'
 
 interface IProps {
   dataComponents: IGadgetgalaxyComponents
@@ -17,13 +18,14 @@ interface IProps {
 
 export const Products = ({ dataComponents, page }: IProps) => {
   const [products, setProducts] = useState(dataComponents.results)
+  const [loading, setLoading] = useState(false)
   const { formState, onInputTextChange } = useForm({
     search: '',
   })
-
   // Debounced function to fetch products using getComponents
   const fetchProducts = useCallback(
     debounce(async (query: string) => {
+      setLoading(true)
       try {
         const response = await getComponents({
           limit: 35, // Puedes ajustar el límite según sea necesario
@@ -37,6 +39,8 @@ export const Products = ({ dataComponents, page }: IProps) => {
         }
       } catch (error) {
         console.error('Error fetching products:', error)
+      } finally {
+        setLoading(false)
       }
     }, 500),
     []
@@ -83,7 +87,7 @@ export const Products = ({ dataComponents, page }: IProps) => {
           name='search'
         />
       </div>
-      <ProductGrid products={products} />
+      {loading ? <ProductGridSekeleton /> : <ProductGrid products={products} />}
       <PaginationSection defaultPage={page} totalPages={dataComponents.count} />
     </>
   )

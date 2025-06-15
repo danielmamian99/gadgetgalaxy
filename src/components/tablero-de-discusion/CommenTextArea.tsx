@@ -9,11 +9,16 @@ import { useComments } from './useComments'
 import { Portal } from '../ui/portal'
 
 export const CommentTextArea = ({ dashboardId }: { dashboardId: string }) => {
-  const { fetchComments } = useComments({
+  const {
+    fetchComments,
+    setIsLoadingAdd,
+    isLoadingAdd,
+    isLoadingComments,
+    isLoadingDelete,
+  } = useComments({
     dashboardId,
   })
   const { authUser } = useSession()
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const { isLogin } = useSession()
   const [description, setDescription] = useState('')
@@ -26,25 +31,24 @@ export const CommentTextArea = ({ dashboardId }: { dashboardId: string }) => {
       openAuthModal()
       return
     }
-    setIsLoading(true)
+    setIsLoadingAdd(true)
     const response = await postComment({
       dashboardId,
       comment: description,
       token: authUser?.token ?? '',
     })
-    setIsLoading(false)
     if (response.error) {
       setError('Error al enviar el comentario')
     }
     if (response.isSuccess) {
-      // await fetchComments()
+      await fetchComments()
       setDescription('')
       setError('')
     }
   }
   return (
     <div className='relative'>
-      {isLoading && (
+      {isLoadingComments && (
         <div className='fixed bottom-5 right-5 flex border rounded-lg border-surface-strokes bg-white p-2'>
           <p>Actualizando comentarios...</p>
           <GoogleIcon
@@ -73,11 +77,21 @@ export const CommentTextArea = ({ dashboardId }: { dashboardId: string }) => {
           Cancelar
         </Button>
         <Button
-          isDisabled={isLoading || !description}
+          isDisabled={isLoadingAdd || !description}
           onClick={onComment}
           size='sm'
+          className={isLoadingAdd && isLoadingComments ? '!bg-notif-green' : ''}
         >
-          {isLoading ? <p>Enviando...</p> : <p>Comentar</p>}
+          {isLoadingAdd && !isLoadingComments && <p>Enviando...</p>}
+          {isLoadingAdd && isLoadingComments && (
+            <div className='flex gap-1 items-center text-white'>
+              <p>Enviado</p>
+              <GoogleIcon name='check' />
+            </div>
+          )}
+          {((!isLoadingAdd && !isLoadingComments) || isLoadingDelete) && (
+            <p>Comentar</p>
+          )}
         </Button>
       </div>
     </div>

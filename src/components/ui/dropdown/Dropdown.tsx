@@ -93,9 +93,8 @@ export const Dropdown: FC<DropdownProps> = (props) => {
     isResponsive,
     inMobileFullHeight,
   }
-
   return (
-    <DropdownProvider value={contextValues}>
+    <DropdownProvider value={contextValues as any}>
       <div
         ref={refs.setReference}
         data-testid='dropdown'

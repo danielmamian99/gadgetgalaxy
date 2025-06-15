@@ -46,16 +46,15 @@ export const _ModalFooter: FC<ModalFooterProps> = ({
           'px-4 py-[9px] flex items-center justify-between w-full flex-row'
         )}
       >
-        <Button
-          variant={resetOptions.variant}
-          onClick={resetOptions.onClick}
-          text={resetOptions.label}
-        />
+        <Button variant={resetOptions.variant} onClick={resetOptions.onClick}>
+          {resetOptions.label}
+        </Button>
         <Button
           variant={confirmOptions.variant}
           onClick={confirmOptions.onClick}
-          text={confirmOptions.label}
-        />
+        >
+          {confirmOptions.label}
+        </Button>
       </footer>
     </>
   )

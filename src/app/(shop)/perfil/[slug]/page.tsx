@@ -1,7 +1,6 @@
 import { Profile } from '@/app/modules/profile/Profile'
 import { getBoardsById, getUserById } from '@/app/services'
-import { PageNotFound } from '@/components'
-import { usersProfile } from '@/seed/seed'
+import { PageNotFound } from '@/components/ui/not-found/PageNotFound'
 
 interface IProductPageProps {
   params: {

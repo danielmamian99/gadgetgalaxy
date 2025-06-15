@@ -12,12 +12,19 @@ export const useComments = ({
   comments: commentsProps,
   dashboardId,
 }: IProps) => {
-  const { setComments, comments, isLoading, setIsLoading } = useTableroStore(
-    (state) => state
-  )
-
+  const {
+    setComments,
+    comments,
+    isLoadingAdd,
+    isLoadingDelete,
+    setIsLoadingAdd,
+    setIsLoadingComments,
+    isLoadingComments,
+    setIsLoadingDelete,
+  } = useTableroStore((state) => state)
   const fetchComments = async () => {
     try {
+      setIsLoadingComments(true)
       const response = await getComments(dashboardId)
       if (response.isSuccess) {
         setComments(response.data.results)
@@ -33,7 +40,9 @@ export const useComments = ({
         type: 'error',
       })
     } finally {
-      setIsLoading(false)
+      setIsLoadingComments(false)
+      setIsLoadingAdd(false)
+      setIsLoadingDelete(false)
     }
   }
 
@@ -45,7 +54,12 @@ export const useComments = ({
 
   return {
     comments,
-    isLoading,
+    isLoadingAdd,
+    isLoadingComments,
+    isLoadingDelete,
     fetchComments,
+    setIsLoadingAdd,
+    setIsLoadingComments,
+    setIsLoadingDelete,
   }
 }

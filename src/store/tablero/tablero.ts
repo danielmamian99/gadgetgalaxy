@@ -2,19 +2,35 @@ import { create } from 'zustand'
 import { IComment } from '@/interfaces/table.interface'
 
 interface State {
-  isLoading: boolean
-  setIsLoading: (isLoading: boolean) => void
+  isLoadingAdd: boolean
+  isLoadingDelete: boolean
+  isLoadingComments: boolean
+  setIsLoadingComments: (setIsLoadingComments: boolean) => void
+  setIsLoadingAdd: (setIsLoadingAdd: boolean) => void
+  setIsLoadingDelete: (setIsLoadingDelete: boolean) => void
   comments: IComment[]
   setComments: (comments: IComment[]) => void
 }
 
 export const useTableroStore = create<State>((set) => ({
   comments: [],
-  isLoading: false,
-  setIsLoading: (isLoading) =>
+  isLoadingAdd: false,
+  isLoadingDelete: false,
+  isLoadingComments: false,
+  setIsLoadingComments: (isLoadingComments) =>
     set((state) => ({
       ...state,
-      isLoading: isLoading,
+      isLoadingComments: isLoadingComments,
+    })),
+  setIsLoadingAdd: (isLoadingAdd) =>
+    set((state) => ({
+      ...state,
+      isLoadingAdd: isLoadingAdd,
+    })),
+  setIsLoadingDelete: (isLoadingDelete) =>
+    set((state) => ({
+      ...state,
+      isLoadingDelete: isLoadingDelete,
     })),
   setComments: (comments) =>
     set((state) => ({

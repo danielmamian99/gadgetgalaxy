@@ -14,6 +14,7 @@ export interface IComponent {
   nombre: EResultName
   imageUrl: string
   datasheetUrl: string
+  priceBreaks: string
 }
 
 export enum EResultName {

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button/Button'
 import { deleteComment } from '@/app/services/boards.services'
 import useSession from '@/hooks/useSession'
 import toast from '@/components/ui/toast'
+import { useTableroStore } from '@/store/tablero/tablero'
 
 interface IProps {
   commentId: string
@@ -18,22 +19,24 @@ export const DeleteCommentModal = ({
   dashboardId,
   onDelete,
 }: IProps) => {
-  const [isLoading, setIsLoading] = useState(false)
   const isDeleteModalOpen = useUIStore((state) => state.isDeleteModalOpen)
   const setIsDeleteModalOpen = useUIStore((state) => state.setIsDeleteModalOpen)
+  const isLoadingDelete = useTableroStore((state) => state.isLoadingDelete)
+  const setIsLoadingDelete = useTableroStore(
+    (state) => state.setIsLoadingDelete
+  )
   const { authUser } = useSession()
   const onClose = () => {
     setIsDeleteModalOpen(false)
   }
   const onDeleteComment = async (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation()
-    setIsLoading(true)
+    setIsLoadingDelete(true)
     const response = await deleteComment({
       dashboardId,
       commentId,
       token: authUser?.token ?? '',
     })
-    setIsLoading(false)
     if (response.error || !response.isSuccess) {
       toast({
         title: 'Error al eliminar el comentario',
@@ -68,8 +71,8 @@ export const DeleteCommentModal = ({
           Cancelar
         </Button>
         <Button variant='cancel' size='sm' onClick={onDeleteComment}>
-          {isLoading ? 'Eliminando... ' : 'Eliminar'}
-          {isLoading ? (
+          {isLoadingDelete ? 'Eliminando... ' : 'Eliminar'}
+          {isLoadingDelete ? (
             <GoogleIcon className='animate-spin' name='progress_activity' />
           ) : (
             <GoogleIcon name='delete' />

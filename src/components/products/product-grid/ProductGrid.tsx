@@ -1,4 +1,4 @@
-import { IComponent } from '@/interfaces'
+import { IComponent } from '@/interfaces/product.interface'
 import { ProductGridItem } from './ProductGridItem'
 
 interface IProps {

@@ -1,10 +1,7 @@
 import { FC } from 'react'
-import { ToastContainer, ToastContainerProps } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 
-export type ToastProviderProps = Omit<
-  ToastContainerProps,
-  'closeButton' | 'hideProgressBar' | 'toastStyle' | 'style'
->
+export type ToastProviderProps = {}
 
 export const ToastProvider: FC<ToastProviderProps> = (props) => {
   return (
@@ -17,7 +14,7 @@ export const ToastProvider: FC<ToastProviderProps> = (props) => {
         padding: 0,
         margin: 0,
         border: 'none',
-        boxShadow: 'none'
+        boxShadow: 'none',
       }}
       style={{
         width: 'fit-content',
@@ -25,7 +22,7 @@ export const ToastProvider: FC<ToastProviderProps> = (props) => {
         margin: 0,
         padding: 0,
         marginRight: '0.5rem',
-        marginTop: '5.5rem'
+        marginTop: '5.5rem',
       }}
     />
   )

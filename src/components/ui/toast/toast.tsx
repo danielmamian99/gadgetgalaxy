@@ -1,8 +1,8 @@
 import { MouseEvent } from 'react'
-import { toast as toastify, ToastOptions } from 'react-toastify'
+import { toast as toastify } from 'react-toastify'
 import ToastComponent from './ToastComponent'
 
-export interface toastOptions extends ToastOptions {
+export interface toastOptions {
   /**
    * The `title` parameter is the title of the toast.
    */
@@ -63,7 +63,7 @@ const assignedColorProgressByType = {
   success: '#97CC04',
   error: '#EA5858',
   info: '#0038FF',
-  warning: '#F1A208'
+  warning: '#F1A208',
 } as const
 
 /* The `toast` function is a helper function that creates and displays a toast notification
@@ -75,10 +75,7 @@ export const toast = (options: toastOptions) => {
     customIcon,
     actions = null,
     description,
-    position = 'top-right',
-    autoClose = 4000,
-    hideProgressBar = false,
-    closeOnClick = true
+    ...toastifyOptions
   } = options
 
   return (
@@ -92,11 +89,8 @@ export const toast = (options: toastOptions) => {
           customIcon={customIcon}
         />,
         {
-          position,
-          autoClose: actions ? false : autoClose,
-          hideProgressBar,
+          ...toastifyOptions,
           closeButton: false,
-          closeOnClick,
           icon: false,
           progressStyle: {
             accentColor: assignedColorProgressByType[type],
@@ -104,8 +98,8 @@ export const toast = (options: toastOptions) => {
             marginLeft: '7px',
             marginRight: '7px',
             maxWidth: '290.93px',
-            borderRadius: '0 0 12px 12px'
-          }
+            borderRadius: '0 0 12px 12px',
+          },
         }
       )}
     </>

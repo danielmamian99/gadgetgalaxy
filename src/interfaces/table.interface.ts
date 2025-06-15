@@ -31,6 +31,11 @@ export interface ITableData {
   comments: IComment[]
 }
 
+export interface IPriceBreak {
+  qty: string
+  price: string
+  currency: string
+}
 export interface ITableItem {
   id: number
   name: string
@@ -38,4 +43,5 @@ export interface ITableItem {
   quantity: number
   imageUrl: string
   providerName: string
+  priceBreaks: IPriceBreak[]
 }

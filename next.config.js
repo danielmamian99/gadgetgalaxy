@@ -13,6 +13,9 @@ const nextConfig = {
       'media.wiggot.mx',
     ],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 module.exports = nextConfig

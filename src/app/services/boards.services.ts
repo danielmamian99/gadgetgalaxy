@@ -1,4 +1,4 @@
-import { fetchServer } from '../utils/fetch-server'
+import { fetchServer, snakeToCamel } from '../utils/fetch-server'
 
 interface IProps {
   limit: number
@@ -147,7 +147,6 @@ export const deleteComment = async ({
         }),
       }
     )
-    console.log('response >>>', response)
     return {
       isSuccess: response.ok,
       data: { ...response, status: response.status },
@@ -169,7 +168,7 @@ export const getComments = async (dashboardId: string) => {
     const data = await response.json()
     return {
       isSuccess: response.ok,
-      data: { ...data, status: response.status },
+      data: { ...snakeToCamel(data), status: response.status },
     }
   } catch (error) {
     console.error('Error fetching comments:', error)

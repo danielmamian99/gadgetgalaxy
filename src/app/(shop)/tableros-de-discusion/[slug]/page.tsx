@@ -1,6 +1,6 @@
 import { getDiscussionBoardById } from '@/app/services/boards.services'
 import { formatIsoToCustom } from '@/app/utils/formatter-dates'
-import { PageNotFound } from '@/components'
+import { PageNotFound } from '@/components/ui/not-found/PageNotFound'
 import { CommentsGrid } from '@/components/tablero-de-discusion/CommentsGrid'
 import { TableInfo } from '@/components/tablero-de-discusion/TableInfo'
 

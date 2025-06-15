@@ -13,7 +13,7 @@ interface IProps {
 }
 export const TableInfo = ({ tableInfo, ownerInfo, components }: IProps) => {
   return (
-    <div className='flex flex-col gap-2 border-b-2 border-surface-strokes md:pb-6'>
+    <div className='flex flex-col gap-2  md:pb-6 border-b-2 border-surface-strokes'>
       <UserProfile
         date={tableInfo.createdAt}
         userInfo={ownerInfo}
