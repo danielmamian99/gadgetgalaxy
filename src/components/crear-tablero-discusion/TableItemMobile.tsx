@@ -17,8 +17,16 @@ export const TableItemMobile = ({ item }: IProps) => {
   const { updateComponentQuantity, removeComponentFromBoard } =
     useCreateDiscussionStore()
   const [showPriceTable, setShowPriceTable] = useState(false)
-  const { name, imageUrl, providerName, quantity, price, id, priceBreaks } =
-    item
+  const {
+    name,
+    imageUrl,
+    providerName,
+    quantity,
+    price,
+    id,
+    priceBreaks,
+    stockNumber,
+  } = item
 
   const onChangeQuantity = (newQuantity: number) => {
     updateComponentQuantity(id, newQuantity)
@@ -84,7 +92,7 @@ export const TableItemMobile = ({ item }: IProps) => {
           width={50}
           height={50}
         />
-        <div className='flex gap-1 flex-col pr-2'>
+        <div className='flex gap-1 flex-col pr-2 w-full'>
           <div className='flex items-center gap-2'>
             <div className='flex items-center  gap-1 pt-1'>
               <p className='text-xs'>
@@ -92,7 +100,7 @@ export const TableItemMobile = ({ item }: IProps) => {
               </p>
             </div>
           </div>
-          <div className='flex items-center gap-6 pt-1'>
+          <div className='flex items-center justify-between gap-2 pt-1 w-full'>
             <QuantitySelectorV2
               value={quantity}
               className='text-xs w-auto items-center [&>input]:h-[28px] [&>input]:w-[28px] [&>input]:rounded-[8px] [&>input]:!bg-white [&>input]:border [&>input]:border-surface-gray-20 z-1'
@@ -106,7 +114,27 @@ export const TableItemMobile = ({ item }: IProps) => {
               onChangeInputValue={onChangeQuantity}
               onChange={onChangeQuantity}
               minQuantity={1}
+              maxQuantity={stockNumber}
             />
+            <div className='flex flex-col h-full'>
+              <p
+                className={composeClasses(
+                  'text-xs flex-1 whitespace-nowrap',
+                  quantity >= stockNumber && 'text-red-500'
+                )}
+              >
+                Stock: {stockNumber}
+              </p>
+              {hasDiscount && (
+                <span className='text-green-600 text-xs font-semibold'>
+                  -
+                  {formatCurrency(
+                    originalUnitPrice - currentUnitPrice,
+                    currency
+                  )}
+                </span>
+              )}
+            </div>
             <button
               onClick={onRemove}
               className='bg-notif-red rounded-xl w-6 h-6 flex justify-center items-center'
@@ -132,9 +160,7 @@ export const TableItemMobile = ({ item }: IProps) => {
           className='flex items-center justify-between w-full'
           onClick={() => setShowPriceTable(!showPriceTable)}
         >
-          <p className='text-xs'>
-            Tabla de precios: {priceBreaks.length} disponibles
-          </p>
+          <p className='text-xs'>Tabla de precios y descuentos</p>
           {showPriceTable ? (
             <GoogleIcon
               name='keyboard_arrow_up'

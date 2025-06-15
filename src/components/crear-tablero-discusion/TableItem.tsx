@@ -15,8 +15,16 @@ export const TableItem = ({ item }: IProps) => {
   const { updateComponentQuantity, removeComponentFromBoard } =
     useCreateDiscussionStore()
   const [showPriceTable, setShowPriceTable] = useState(false)
-  const { name, imageUrl, providerName, quantity, price, id, priceBreaks } =
-    item
+  const {
+    name,
+    imageUrl,
+    providerName,
+    quantity,
+    price,
+    id,
+    priceBreaks,
+    stockNumber,
+  } = item
 
   const onChangeQuantity = (newQuantity: number) => {
     updateComponentQuantity(id, newQuantity)
@@ -86,32 +94,54 @@ export const TableItem = ({ item }: IProps) => {
             <p className='text-sm'>{name}</p>
             <p className='text-xs'>Proveedor: {providerName}</p>
           </div>
-          <div className='flex flex-col gap-1'>
-            <p className='text-xs'>
-              Precio:
-              <span className='font-semibold ml-1'>
-                {formatCurrency(currentUnitPrice, currency)}
-              </span>
-              {hasDiscount && (
-                <span className='ml-2 text-gray-400 line-through'>
-                  {formatCurrency(originalUnitPrice, currency)}
+          <div className='flex gap-1'>
+            <div className='flex flex-col gap-1'>
+              <p className='text-xs'>
+                Precio:
+                <span className='font-semibold ml-1'>
+                  {formatCurrency(currentUnitPrice, currency)}
                 </span>
+              </p>
+              <QuantitySelectorV2
+                value={quantity}
+                className='text-xs w-auto items-center [&>input]:h-[30px] [&>input]:w-[30px] [&>input]:rounded-[8px] [&>input]:!bg-white [&>input]:border [&>input]:border-surface-gray-20 z-1'
+                classNameRightButton='hover:border-primary active:bg-primary active:text-white !h-[30px] !w-[30px]'
+                classNameLeftButton={composeClasses(
+                  '!h-[30px] !w-[30px]',
+                  quantity > 1 &&
+                    'hover:border-primary active:bg-primary active:text-white'
+                )}
+                isEditable={true}
+                onChangeInputValue={onChangeQuantity}
+                onChange={onChangeQuantity}
+                minQuantity={1}
+                maxQuantity={stockNumber}
+              />
+            </div>
+            <div className='flex flex-col gap-1 h-full'>
+              {hasDiscount && (
+                <>
+                  <span className='ml-2 text-gray-400 line-through text-xs'>
+                    {formatCurrency(originalUnitPrice, currency)}
+                  </span>
+                  <span className='ml-2 text-green-600 text-xs font-semibold'>
+                    -
+                    {formatCurrency(
+                      originalUnitPrice - currentUnitPrice,
+                      currency
+                    )}
+                  </span>
+                </>
               )}
-            </p>
-            <QuantitySelectorV2
-              value={quantity}
-              className='text-xs w-auto items-center [&>input]:h-[30px] [&>input]:w-[30px] [&>input]:rounded-[8px] [&>input]:!bg-white [&>input]:border [&>input]:border-surface-gray-20 z-1'
-              classNameRightButton='hover:border-primary active:bg-primary active:text-white !h-[30px] !w-[30px]'
-              classNameLeftButton={composeClasses(
-                '!h-[30px] !w-[30px]',
-                quantity > 1 &&
-                  'hover:border-primary active:bg-primary active:text-white'
-              )}
-              isEditable={true}
-              onChangeInputValue={onChangeQuantity}
-              onChange={onChangeQuantity}
-              minQuantity={1}
-            />
+              <p
+                className={composeClasses(
+                  'text-xs flex-1 whitespace-nowrap',
+                  quantity >= stockNumber && 'text-red-500'
+                )}
+              >
+                Stock: {stockNumber}
+              </p>
+            </div>
           </div>
         </div>
         <div className='flex items-center justify-center h-full px-6'>
@@ -128,9 +158,7 @@ export const TableItem = ({ item }: IProps) => {
           className='flex items-center justify-between w-full'
           onClick={() => setShowPriceTable(!showPriceTable)}
         >
-          <p className='text-xs'>
-            Tabla de precios y descuentos: {priceBreaks.length} disponibles
-          </p>
+          <p className='text-xs'>Tabla de precios y descuentos</p>
           {showPriceTable ? (
             <GoogleIcon
               name='keyboard_arrow_up'

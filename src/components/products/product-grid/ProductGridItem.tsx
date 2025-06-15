@@ -35,6 +35,7 @@ export const ProductGridItem = ({ product }: IProps) => {
     datasheetUrl,
     proveedor,
     priceBreaks,
+    stockNumber,
   } = product
   const priceBreaksArray = parsePriceBreaks(priceBreaks)
   const hasDatasheet = Boolean(datasheetUrl) && datasheetUrl !== 'N/A'
@@ -51,6 +52,7 @@ export const ProductGridItem = ({ product }: IProps) => {
       imageUrl: product.imageUrl,
       providerName: ProviderName,
       priceBreaks: priceBreaksArray,
+      stockNumber: stockNumber,
     })
   }
   const isComponentInBoard = selectedComponents.find(
@@ -71,11 +73,16 @@ export const ProductGridItem = ({ product }: IProps) => {
         />
       </Link>
       <div className='flex gap-1 w-full flex-col p-[10px]'>
-        <Link className='hover:text-blue-500' href={url}>
-          <p>{nombre}</p>
-          <p>{referencia}</p>
-        </Link>
-        <span className='font-bold '>{precio}</span>
+        <div className='flex gap-2'>
+          <Link className='flex-1 hover:text-blue-500' href={url}>
+            <p>{nombre}</p>
+            <p>{referencia}</p>
+          </Link>
+          <div className='flex flex-col items-end'>
+            <span className='font-bold '>{precio}</span>
+            <p>Stock: {stockNumber}</p>
+          </div>
+        </div>
 
         <div className='flex gap-2'>
           <Button
@@ -89,6 +96,11 @@ export const ProductGridItem = ({ product }: IProps) => {
           </Button>
           <div className='relative'>
             <Button
+              isDisabled={
+                stockNumber === 0 ||
+                (isComponentInBoard &&
+                  isComponentInBoard.quantity >= stockNumber)
+              }
               onClick={onAddComponent}
               className={composeClasses(
                 'truncate',
@@ -98,7 +110,9 @@ export const ProductGridItem = ({ product }: IProps) => {
               )}
               size='sm'
             >
-              Agregar a tablero
+              {isComponentInBoard && isComponentInBoard.quantity >= stockNumber
+                ? 'Cantidad máxima'
+                : 'Agregar a tablero'}
             </Button>
             {isComponentInBoard && (
               <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>

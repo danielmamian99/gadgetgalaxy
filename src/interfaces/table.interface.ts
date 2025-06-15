@@ -44,4 +44,5 @@ export interface ITableItem {
   imageUrl: string
   providerName: string
   priceBreaks: IPriceBreak[]
+  stockNumber: number
 }
