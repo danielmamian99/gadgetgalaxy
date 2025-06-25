@@ -14,16 +14,10 @@ export const getDiscussionBoards = async ({ limit, offset, query }: IProps) => {
 
   try {
     const response = await fetchServer(url)
-    return {
-      isSuccess: true,
-      data: response,
-    }
+    return { isSuccess: true, data: response }
   } catch (error) {
     console.error('Error fetching discussion boards:', error)
-    return {
-      isSuccess: false,
-      error,
-    }
+    return { isSuccess: false, error }
   }
 }
 
@@ -31,15 +25,9 @@ export const getDiscussionBoardById = async (id: string) => {
   const url = `${URL}/discussion-boards/${id}/`
   try {
     const response = await fetchServer(url)
-    return {
-      isSuccess: true,
-      data: response,
-    }
+    return { isSuccess: true, data: response }
   } catch (error) {
-    return {
-      isSuccess: false,
-      error,
-    }
+    return { isSuccess: false, error }
   }
 }
 
@@ -47,13 +35,11 @@ export const postDiscussionBoard = async ({
   name,
   description,
   token,
-  selectedComponents,
   adminId,
 }: {
   name: string
   description: string
   token: string
-  selectedComponents: number[]
   adminId: string
 }) => {
   try {
@@ -66,7 +52,6 @@ export const postDiscussionBoard = async ({
       body: JSON.stringify({
         nombre: name,
         description,
-        components_ids: selectedComponents,
         admin: adminId,
         users_ids: [adminId],
       }),
@@ -79,12 +64,40 @@ export const postDiscussionBoard = async ({
     }
   } catch (error) {
     console.error('Error during login:', error)
-    return {
-      isSuccess: false,
-      error,
-    }
+    return { isSuccess: false, error }
   }
 }
+export const addComponentToDiscussionBoard = async ({
+  boardId,
+  componentId,
+  quantity,
+  token,
+}: {
+  boardId: string
+  componentId: number
+  quantity: number
+  token: string
+}) => {
+  try {
+    const response = await fetch(`${URL}/discussion-board-components/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        discussion_board: boardId,
+        component: componentId,
+        quantity,
+      }),
+    })
+    const data = await response.json()
+    return { isSuccess: response.ok, data }
+  } catch (error) {
+    return { isSuccess: false, error }
+  }
+}
+
 export const postComment = async ({
   dashboardId,
   comment,
@@ -117,10 +130,7 @@ export const postComment = async ({
     }
   } catch (error) {
     console.error('Error during login:', error)
-    return {
-      isSuccess: false,
-      error,
-    }
+    return { isSuccess: false, error }
   }
 }
 
@@ -142,9 +152,7 @@ export const deleteComment = async ({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          comment_id: commentId,
-        }),
+        body: JSON.stringify({ comment_id: commentId }),
       }
     )
     return {
@@ -153,10 +161,7 @@ export const deleteComment = async ({
     }
   } catch (error) {
     console.error('Error during login:', error)
-    return {
-      isSuccess: false,
-      error,
-    }
+    return { isSuccess: false, error }
   }
 }
 
@@ -172,9 +177,19 @@ export const getComments = async (dashboardId: string) => {
     }
   } catch (error) {
     console.error('Error fetching comments:', error)
-    return {
-      isSuccess: false,
-      error,
-    }
+    return { isSuccess: false, error }
+  }
+}
+
+// Obtener componentes y cantidades de un discussion board
+export const getDiscussionBoardComponents = async (boardId: string) => {
+  try {
+    const response = await fetch(
+      `${URL}/discussion-board-components/?discussion_board=${boardId}`
+    )
+    const data = await response.json()
+    return { isSuccess: response.ok, data }
+  } catch (error) {
+    return { isSuccess: false, error }
   }
 }

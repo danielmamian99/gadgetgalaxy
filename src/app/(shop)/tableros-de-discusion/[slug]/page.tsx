@@ -1,13 +1,14 @@
-import { getDiscussionBoardById } from '@/app/services/boards.services'
+import {
+  getDiscussionBoardById,
+  getDiscussionBoardComponents,
+} from '@/app/services/boards.services'
 import { formatIsoToCustom } from '@/app/utils/formatter-dates'
 import { PageNotFound } from '@/components/ui/not-found/PageNotFound'
 import { CommentsGrid } from '@/components/tablero-de-discusion/CommentsGrid'
 import { TableInfo } from '@/components/tablero-de-discusion/TableInfo'
 
 interface IProductPageProps {
-  params: {
-    slug: string
-  }
+  params: { slug: string }
 }
 
 export default async function DiscussionBoardPage({
@@ -16,6 +17,10 @@ export default async function DiscussionBoardPage({
   const { slug } = params
 
   const { isSuccess, data } = await getDiscussionBoardById(slug)
+  const componentsRes = await getDiscussionBoardComponents(slug)
+  const componentsNum = componentsRes.isSuccess
+    ? componentsRes.data.results
+    : []
 
   if (!isSuccess || !data) {
     return <PageNotFound />
@@ -31,6 +36,14 @@ export default async function DiscussionBoardPage({
     id,
     components,
   } = data.data
+
+  const mergedComponents = Array.isArray(components)
+    ? components.map((comp: any) => {
+        const found = componentsNum.find((c: any) => c.component === comp.id)
+        return { ...comp, quantity: found ? found.quantity : 1 }
+      })
+    : []
+
   return (
     <div className='flex flex-col gap-6 my-6 p-6 bg-white rounded-xl'>
       {/* Información del tablero */}
@@ -42,7 +55,7 @@ export default async function DiscussionBoardPage({
           createdAt: formatIsoToCustom(createdAt),
         }}
         ownerInfo={users?.find((user: any) => user.id === admin)}
-        components={components}
+        components={mergedComponents}
       />
 
       <CommentsGrid dashboardId={slug} comments={messages} />

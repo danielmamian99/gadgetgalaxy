@@ -16,6 +16,7 @@ export interface IComponent {
   datasheetUrl: string
   priceBreaks: string
   stockNumber: number
+  quantity: number
 }
 
 export enum EResultName {

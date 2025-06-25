@@ -114,6 +114,11 @@ export const ProductGridItem = ({ product }: IProps) => {
                 ? 'Cantidad máxima'
                 : 'Agregar a tablero'}
             </Button>
+            {!!product!.quantity && (
+              <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
+                {product!.quantity}
+              </div>
+            )}
             {isComponentInBoard && (
               <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
                 {isComponentInBoard.quantity}
