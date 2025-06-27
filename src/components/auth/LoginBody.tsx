@@ -39,8 +39,7 @@ export const LoginBody = ({ onGoToRegister, closeAuthModal }: IProps) => {
   )
   const { email, password } = formState
 
-  const onSubmit = async (e: React.MouseEvent<Element, MouseEvent>) => {
-    e.stopPropagation()
+  const onSubmit = async () => {
     setShowErrors(true)
     setErrorMessage(null)
 
@@ -75,13 +74,18 @@ export const LoginBody = ({ onGoToRegister, closeAuthModal }: IProps) => {
     }
   }
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    onSubmit()
+  }
+
   const onClick = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation()
     onGoToRegister()
   }
   return (
     <div className='flex flex-col gap-3 bg-white rounded-lg justify-between h-full w-full'>
-      <div className='flex flex-col gap-3'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
         <h1 className={`${titleFont.className} text-4xl mb-5`}>Ingresar</h1>
         <Input
           error={showErrors && formValidation.emailValid}
@@ -104,17 +108,16 @@ export const LoginBody = ({ onGoToRegister, closeAuthModal }: IProps) => {
         {errorMessage && (
           <p className='text-red-500 text-sm mt-2'>{errorMessage}</p>
         )}
-      </div>
-      <div className='flex flex-col'>
         <Button
           isDisabled={!isFormValid || loading}
-          type='button'
-          onClick={onSubmit}
+          type='submit'
           className='!py-2'
           size='md'
         >
           {loading ? 'Cargando...' : 'Ingresar'}
         </Button>
+      </form>
+      <div className='flex flex-col'>
         <div className='flex items-center my-4'>
           <div className='flex-1 border-t border-gray-500'></div>
           <div className='px-2 text-gray-800'>O</div>

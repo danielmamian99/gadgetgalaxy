@@ -76,6 +76,12 @@ export const RegisterClient = ({
     })
     onGoToLogin()
   }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    onSubmit()
+  }
+
   const onClick = () => {
     onGoToLogin()
   }
@@ -87,7 +93,7 @@ export const RegisterClient = ({
 
   return (
     <div className='flex flex-col items-between justify-between bg-white rounded-lg h-full gap-3'>
-      <div className='flex flex-col gap-3'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
         <h1 className={`${titleFont.className} text-4xl mb-5`}>Nueva cuenta</h1>
         <Input
           error={showErrors && formValidation.emailValid}
@@ -163,14 +169,8 @@ export const RegisterClient = ({
             </button>
           </Tooltip>
         </div>
-      </div>
-      <div className='flex flex-col'>
         <Button
-          type='button'
-          onClick={(event) => {
-            event.stopPropagation()
-            onSubmit()
-          }}
+          type='submit'
           className='!py-2'
           size='md'
           isDisabled={!isFormValid}
@@ -183,12 +183,13 @@ export const RegisterClient = ({
             <p className='text-white text-sm'>{createAccountError}</p>
           )}
         </Button>
+      </form>
+      <div className='flex flex-col'>
         <div className='flex items-center my-4'>
           <div className='flex-1 border-t border-gray-500'></div>
           <div className='px-2 text-gray-800'>O</div>
           <div className='flex-1 border-t border-gray-500'></div>
         </div>
-
         <button
           onClick={(event) => {
             event.stopPropagation()

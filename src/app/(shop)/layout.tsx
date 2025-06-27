@@ -6,6 +6,12 @@ import dynamic from 'next/dynamic'
 // const AuthModal = dynamic(() => import('@/components/auth/AuthModal'), {
 //   ssr: false
 // })
+// const TourWizard = dynamic(
+//   async () => (await import('@/components/ui/TourWizard')).TourWizard,
+//   {
+//     ssr: false,
+//   }
+// )
 const TopMenu = dynamic(() => import('@/components/ui/top-menu/TopMenu'), {
   ssr: false,
 })

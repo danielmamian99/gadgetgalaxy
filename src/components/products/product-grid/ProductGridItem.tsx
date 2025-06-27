@@ -109,6 +109,7 @@ export const ProductGridItem = ({ product }: IProps) => {
                   : ''
               )}
               size='sm'
+              dataTour='add-to-board'
             >
               {isComponentInBoard && isComponentInBoard.quantity >= stockNumber
                 ? 'Cantidad máxima'
@@ -156,8 +157,12 @@ export const ProductGridItem = ({ product }: IProps) => {
           )}
         </AnimatePresence>
       </div>
-      <div className='flex flex-1 flex-col p-[10px] gap-2 w-full border-t'>
+      <div
+        data-tour='table-price'
+        className='flex flex-1 flex-col p-[10px] gap-2 w-full border-t'
+      >
         <button
+          id='table-price-card'
           onClick={() => setShowComunityButtons((prev) => !prev)}
           className='flex items-center w-full justify-between'
         >

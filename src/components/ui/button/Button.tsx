@@ -10,7 +10,7 @@ export type ButtonVariant =
 interface IProps {
   children: React.ReactNode
   dataTestId?: string
-  type?: 'button' | 'link'
+  type?: 'button' | 'submit' | 'link'
   size?: 'sm' | 'md' | 'lg'
   onClick?:
     | (() => void)
@@ -20,6 +20,8 @@ interface IProps {
   wFull?: boolean
   variant?: ButtonVariant
   className?: string
+  dataTour?: string
+  id?: string
 }
 const assignedButtonVariant: { [key: string]: string } = {
   primary:
@@ -43,6 +45,8 @@ export const Button: React.FC<IProps> = ({
   className = '',
   onClick,
   dataTestId,
+  dataTour,
+  id,
 }: IProps) => {
   const sizeStyle = {
     sm: 'py-2 px-4 text-sm ',
@@ -56,17 +60,27 @@ export const Button: React.FC<IProps> = ({
     wFull && ' w-full',
     className
   )
-  return type === 'button' || isDisabled ? (
+  return type === 'button' || type === 'submit' || isDisabled ? (
     <button
+      {...(type === 'link' ? {} : { type })}
       onClick={onClick}
       disabled={isDisabled}
       className={style}
       data-testid={dataTestId}
+      data-tour={dataTour}
+      id={id}
     >
       {children}
     </button>
   ) : (
-    <a target='blank' href={href} className={style} data-testid={dataTestId}>
+    <a
+      target='blank'
+      href={href}
+      className={style}
+      data-testid={dataTestId}
+      data-tour={dataTour}
+      id={id}
+    >
       {children}
     </a>
   )

@@ -6,6 +6,7 @@ import { RegisterBody } from './register/RegisterBody'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { CloseButton } from '../ui/button/CloseButton'
 import { composeClasses } from '@/app/utils'
+import { AnimatePresence, motion } from 'framer-motion'
 
 type TSteps = 'login' | 'register'
 
@@ -29,21 +30,38 @@ export const AuthModal = () => {
         <CloseButton onClick={closeAuthModal} />
       </Modal.Header>
       <Modal.Body
-        className={composeClasses(
-          'flex flex-col w-full transition-all',
-          isLogin ? 'h-[426px]' : 'h-[598px]'
-        )}
+        className={composeClasses('flex flex-col w-full transition-all')}
       >
-        {isLogin ? (
-          <LoginBody
-            closeAuthModal={closeAuthModal}
-            onGoToRegister={() => {
-              setStep('register')
-            }}
-          />
-        ) : (
-          <RegisterBody onGoToLogin={onGoToLogin} />
-        )}
+        <AnimatePresence mode='wait' initial={false}>
+          {isLogin ? (
+            <motion.div
+              key='login'
+              initial={{ opacity: 0, maxHeight: 0 }}
+              animate={{ opacity: 1, maxHeight: 800 }}
+              exit={{ opacity: 0, maxHeight: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className='overflow-hidden'
+            >
+              <LoginBody
+                closeAuthModal={closeAuthModal}
+                onGoToRegister={() => {
+                  setStep('register')
+                }}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key='register'
+              initial={{ opacity: 0, maxHeight: 0 }}
+              animate={{ opacity: 1, maxHeight: 800 }}
+              exit={{ opacity: 0, maxHeight: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className='overflow-hidden'
+            >
+              <RegisterBody onGoToLogin={onGoToLogin} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Modal.Body>
     </Modal>
   )

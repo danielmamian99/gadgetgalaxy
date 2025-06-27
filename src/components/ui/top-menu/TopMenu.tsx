@@ -57,6 +57,7 @@ export const TopMenu = () => {
         <Link
           className='m-2 p-2 rounded-md transition-all hover:bg-gray-100 relative'
           href='/tableros-de-discusion'
+          data-tour='see-boards'
         >
           Tableros de discusión
           <div
@@ -73,6 +74,7 @@ export const TopMenu = () => {
           size='sm'
           className='font-semibold flex md:hidden !p-2 !w-8 !h-8 relative'
           onClick={(e) => openCreateBoardModal()}
+          dataTour='create-board-mobile'
         >
           <GoogleIcon className='text-xl' name='table' />
           {selectedComponents.length > 0 && (
@@ -82,6 +84,7 @@ export const TopMenu = () => {
           )}
         </Button>
         <button
+          data-tour='menu-hamburguesa'
           onClick={() => openSideMenu()}
           className='m-2 p-2 rounded-md transition-all hover:bg-gray-100 flex md:hidden'
         >
@@ -91,6 +94,8 @@ export const TopMenu = () => {
           size='sm'
           className='font-semibold hidden md:flex h-[42px] whitespace-nowrap relative'
           onClick={(e) => openCreateBoardModal()}
+          dataTour='create-board'
+          id='create-board'
         >
           Crear tablero de discusión
           {selectedComponents.length > 0 && (
@@ -110,6 +115,7 @@ export const TopMenu = () => {
               e.stopPropagation()
               setIsAuthModalOpen(true)
             }}
+            dataTour='login'
           >
             Iniciar sesión
           </Button>

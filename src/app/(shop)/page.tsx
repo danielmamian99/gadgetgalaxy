@@ -1,3 +1,4 @@
+import { HomeModule } from '@/modules/home'
 import { getComponents } from '../services'
 import { Products } from '@/components/products/Products'
 
@@ -47,7 +48,7 @@ export default async function Home({ searchParams }: IProps) {
   return (
     <div>
       {data ? (
-        <Products page={page} dataComponents={data} />
+        <HomeModule dataComponents={data} page={page} />
       ) : (
         <div>Loading...</div>
       )}

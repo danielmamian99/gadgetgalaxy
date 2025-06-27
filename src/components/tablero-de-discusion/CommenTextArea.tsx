@@ -48,16 +48,6 @@ export const CommentTextArea = ({ dashboardId }: { dashboardId: string }) => {
   }
   return (
     <div className='relative'>
-      {isLoadingComments && (
-        <div className='fixed bottom-5 right-5 flex border rounded-lg border-surface-strokes bg-white p-2'>
-          <p>Actualizando comentarios...</p>
-          <GoogleIcon
-            className='text-button-primary animate-spin'
-            name='progress_activity'
-          />
-        </div>
-      )}
-
       <TextArea
         error={error}
         setValue={(value) => {

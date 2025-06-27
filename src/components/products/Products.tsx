@@ -66,7 +66,7 @@ export const Products = ({ dataComponents, page }: IProps) => {
               ¡Reúnete con personas de la comunidad para comprar productos al
               por mayor y reducir tus costos!
             </p>
-            <div className='max-w-[220px] '>
+            <div data-tour='see-boards-mobile' className='max-w-[220px] '>
               <LinkButtonNext
                 className='flex items-center justify-center text-sm'
                 href='/tableros-de-discusion'

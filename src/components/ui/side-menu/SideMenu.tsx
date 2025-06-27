@@ -99,6 +99,7 @@ export const SideMenu = () => {
           </Link>
         ) : (
           <button
+            data-tour='login-mobile'
             onClick={onLogin}
             className='flex items-center hover:bg-gray-100 rounded transition-all '
           >
