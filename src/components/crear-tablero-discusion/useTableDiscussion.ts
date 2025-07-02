@@ -1,4 +1,7 @@
-import { postDiscussionBoard } from '@/app/services/boards.services'
+import {
+  postDiscussionBoard,
+  addComponentToDiscussionBoard,
+} from '@/app/services/boards.services'
 import { useForm } from '@/hooks/useForm'
 import useMatchWindowQuery from '@/hooks/useMatchWindowQuery'
 import useSession from '@/hooks/useSession'
@@ -10,14 +13,8 @@ import toast from '../ui/toast/toast'
 const boardData = localStorage.getItem('createBoardData')
 const parsedBoardData = boardData ? JSON.parse(boardData) : null
 const INITIAL_FORM = parsedBoardData
-  ? {
-      name: parsedBoardData.name,
-      description: parsedBoardData.description,
-    }
-  : {
-      name: '',
-      description: '',
-    }
+  ? { name: parsedBoardData.name, description: parsedBoardData.description }
+  : { name: '', description: '' }
 const FORM_VALIDATIONS = {
   name: [(name: string) => name.length > 0, 'El nombre es obligatorio'],
 }
@@ -48,11 +45,7 @@ export const useTableDiscussion = () => {
   const saveOnLocalStorage = () => {
     localStorage.setItem(
       'createBoardData',
-      JSON.stringify({
-        selectedComponents,
-        description,
-        name,
-      })
+      JSON.stringify({ selectedComponents, description, name })
     )
   }
   const onSubmit = async () => {
@@ -71,29 +64,32 @@ export const useTableDiscussion = () => {
       return
     }
     setIsLoading(true)
+
     const response = await postDiscussionBoard({
       name,
       description,
-      selectedComponents: selectedComponents.map((item) =>
-        parseInt(`${item.id}`)
-      ),
       token: authUser?.token || '',
       adminId: profile?.id ?? '',
     })
-    setIsLoading(false)
     if (response.error || response.isSuccess === false) {
-      toast({
-        type: 'error',
-        title: 'Error al crear el tablero',
-      })
+      setIsLoading(false)
+      toast({ type: 'error', title: 'Error al crear el tablero' })
       return
     }
-    toast({
-      type: 'success',
-      title: 'Tablero creado con éxito',
-    })
+
+    const boardId = response.data?.id
+    for (const item of selectedComponents) {
+      await addComponentToDiscussionBoard({
+        boardId,
+        componentId: item.id,
+        quantity: item.quantity,
+        token: authUser?.token || '',
+      })
+    }
+    setIsLoading(false)
+    toast({ type: 'success', title: 'Tablero creado con éxito' })
     window.open(
-      `${window.location.origin}/tableros-de-discusion/${response.data?.id}`,
+      `${window.location.origin}/tableros-de-discusion/${boardId}`,
       '_blank'
     )
     closeCreateBoardModal()
