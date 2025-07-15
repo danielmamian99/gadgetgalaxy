@@ -67,6 +67,7 @@ export const postDiscussionBoard = async ({
     return { isSuccess: false, error }
   }
 }
+
 export const addComponentToDiscussionBoard = async ({
   boardId,
   componentId,
@@ -79,7 +80,7 @@ export const addComponentToDiscussionBoard = async ({
   token: string
 }) => {
   try {
-    const response = await fetch(`${URL}/discussion-board-components/`, {
+    const response = await fetch(`${URL}/discussion-board-components/create/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -102,10 +103,12 @@ export const postComment = async ({
   dashboardId,
   comment,
   token,
+  parentId,
 }: {
   dashboardId: string
   comment: string
   token: string
+  parentId?: string
 }) => {
   try {
     const response = await fetch(
@@ -119,6 +122,7 @@ export const postComment = async ({
         body: JSON.stringify({
           content: comment,
           discussion_board: dashboardId,
+          parent: parentId,
         }),
       }
     )

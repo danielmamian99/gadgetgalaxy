@@ -4,14 +4,15 @@ const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}'
+    './src/modules/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
         'notif-red': '#EA5858',
@@ -38,7 +39,7 @@ const config: Config = {
         'button-secondary-pressed': '#A9AEC4',
         'button-disabled': '#F1F4F6',
         'button-dark': '#222222',
-        'tertiary-input': '#898CA8'
+        'tertiary-input': '#898CA8',
       },
       fontSize: {
         /**
@@ -50,12 +51,16 @@ const config: Config = {
           '12px',
           {
             fontWeight: '467',
-            lineHeight: '18px'
-          }
-        ]
-      }
-    }
+            lineHeight: '18px',
+          },
+        ],
+      },
+      height: {
+        'chat-container': 'calc(100vh - 53px)',
+        'screen-minus-header': 'calc(100vh - 53px)',
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }
 export default config

@@ -46,7 +46,7 @@ export default async function Home({ searchParams }: IProps) {
   }
 
   return (
-    <div>
+    <div className='px-6 sm:px-10'>
       {data ? (
         <HomeModule dataComponents={data} page={page} />
       ) : (

@@ -20,3 +20,12 @@ export const parsePriceBreaks = (priceBreaks: string) => {
     })
     .filter((e) => e.qty && e.price && e.currency)
 }
+
+export const formatCurrency = (value: number, currency: string) => {
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: currency || 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value)
+}

@@ -21,5 +21,9 @@ export default async function ({ params }: IProductPageProps) {
   if (!user.data) {
     return <PageNotFound />
   }
-  return <Profile user={{ ...user.data, tables: boards?.data || [] }} />
+  return (
+    <div className='px-6 sm:px-10'>
+      <Profile user={{ ...user.data, tables: boards?.data || [] }} />
+    </div>
+  )
 }

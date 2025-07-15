@@ -11,8 +11,10 @@ import { useAuthModal } from '@/hooks/useAuthModal'
 import { useCreateDiscussionStore } from '@/store/creacion-tablero/creacion-tablero-store'
 import { useUIStore } from '@/store/ui/ui-store'
 import { PriceTable } from '@/components/price-table/PriceTable'
-import { parsePriceBreaks } from '@/helpers/strings'
+import { formatCurrency, parsePriceBreaks } from '@/helpers/strings'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useCalculateDiscounts } from '@/hooks/useCalculateDiscounts'
+import { useJoinBoardStore } from '@/store/unirse-tablero/unirse-tablero-store'
 
 interface IProps {
   product: IComponent
@@ -22,7 +24,21 @@ export const ProductGridItem = ({ product }: IProps) => {
   const startAddBoardAnimation = useUIStore(
     (state) => state.startAddBoardAnimation
   )
-  const { addComponentToBoard, selectedComponents } = useCreateDiscussionStore()
+  const {
+    addComponentToBoard: addComponentToCreateDiscussionBoard,
+    selectedComponents: createDiscussionSelectedComponents,
+  } = useCreateDiscussionStore()
+  const {
+    addComponentToBoard: addComponentToJoinBoard,
+    selectedComponents: joinSelectedComponents,
+  } = useJoinBoardStore()
+  const hasQuantity = !!product!.quantity
+  const selectedComponents = hasQuantity
+    ? joinSelectedComponents
+    : createDiscussionSelectedComponents
+  const addComponentToBoard = hasQuantity
+    ? addComponentToJoinBoard
+    : addComponentToCreateDiscussionBoard
   const { openAuthModal } = useAuthModal()
   const [openProvider, setOpenProvider] = useState(false)
   const [showComunityButtons, setShowComunityButtons] = useState(false)
@@ -58,10 +74,21 @@ export const ProductGridItem = ({ product }: IProps) => {
   const isComponentInBoard = selectedComponents.find(
     (component) => component.id === product.id
   )
+  const hasStock =
+    stockNumber > 0 &&
+    (isComponentInBoard ? stockNumber > isComponentInBoard.quantity : true)
+
+  const { hasDiscount, currency, currentUnitPrice, originalUnitPrice } =
+    useCalculateDiscounts({
+      price: precio,
+      priceBreaks: priceBreaksArray,
+      quantity: product.quantity,
+    })
+
   if (!imageUrl || imageUrl === 'N/A') return <></>
   return (
     <div
-      className={`flex flex-col justify-between items-start rounded-xl overflow-hidden shadow-[0px_3px_6px_0px_rgba(34,34,34,0.16)] bg-white h-full w-full text-sm max-h-[fit-content] `}
+      className={`flex flex-col justify-between items-start rounded-xl overflow-hidden shadow-[0px_3px_6px_0px_rgba(34,34,34,0.16)] bg-white h-full w-fit text-sm max-h-[fit-content] min-w-[276px]`}
     >
       <Link target='blank' className='min-w-full max-h-full ' href={url}>
         <Image
@@ -80,9 +107,31 @@ export const ProductGridItem = ({ product }: IProps) => {
           </Link>
           <div className='flex flex-col items-end'>
             <span className='font-bold '>{precio}</span>
-            <p>Stock: {stockNumber}</p>
+            <p>
+              {hasQuantity ? 'Disponibles' : 'Stock'}:{' '}
+              {stockNumber > 0 ? stockNumber : 0}
+            </p>
           </div>
         </div>
+        {hasQuantity && (
+          <div className='flex justify-between'>
+            <p className='font-semibold'>Pedido actual: {product!.quantity}</p>
+            {hasDiscount && (
+              <div className='flex flex-col items-end'>
+                <span className='text-gray-400 line-through text-xs'>
+                  {formatCurrency(originalUnitPrice, currency)}
+                </span>
+                <span className='text-green-600 text-xs font-semibold'>
+                  -
+                  {formatCurrency(
+                    originalUnitPrice - currentUnitPrice,
+                    currency
+                  )}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className='flex gap-2'>
           <Button
@@ -96,11 +145,7 @@ export const ProductGridItem = ({ product }: IProps) => {
           </Button>
           <div className='relative'>
             <Button
-              isDisabled={
-                stockNumber === 0 ||
-                (isComponentInBoard &&
-                  isComponentInBoard.quantity >= stockNumber)
-              }
+              isDisabled={!hasStock}
               onClick={onAddComponent}
               className={composeClasses(
                 'truncate',
@@ -111,15 +156,13 @@ export const ProductGridItem = ({ product }: IProps) => {
               size='sm'
               dataTour='add-to-board'
             >
-              {isComponentInBoard && isComponentInBoard.quantity >= stockNumber
-                ? 'Cantidad máxima'
-                : 'Agregar a tablero'}
+              {hasStock ? 'Agregar a tablero' : 'Cantidad máxima'}
             </Button>
-            {!!product!.quantity && (
+            {/* {!!product!.quantity && (
               <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
                 {product!.quantity}
               </div>
-            )}
+            )} */}
             {isComponentInBoard && (
               <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
                 {isComponentInBoard.quantity}
