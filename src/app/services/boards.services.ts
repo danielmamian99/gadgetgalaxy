@@ -79,7 +79,7 @@ export const addComponentToDiscussionBoard = async ({
   token: string
 }) => {
   try {
-    const response = await fetch(`${URL}/discussion-board-components/`, {
+    const response = await fetch(`${URL}/discussion-board-components/create/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -89,6 +89,7 @@ export const addComponentToDiscussionBoard = async ({
         discussion_board: boardId,
         component: componentId,
         quantity,
+        type: 'request',
       }),
     })
     const data = await response.json()
