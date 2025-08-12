@@ -90,7 +90,7 @@ export const addComponentToDiscussionBoard = async ({
         discussion_board: boardId,
         component: componentId,
         quantity,
-        type: 'request',
+        type: 'initial',
       }),
     })
     const data = await response.json()
