@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
 
-const { DATABASE_URL = '' } = process.env
+const {
+  DATABASE_URL = '',
+  WEB_SOCKET_URL = '',
+  NEXT_PUBLIC_WEB_SOCKET_URL = '',
+} = process.env
 const nextConfig = {
   env: {
     DATABASE_URL,
+    WEB_SOCKET_URL,
+    NEXT_PUBLIC_WEB_SOCKET_URL,
   },
   images: {
     domains: [

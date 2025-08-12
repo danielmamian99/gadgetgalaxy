@@ -239,7 +239,6 @@ const TourSearchWizzardProvider = ({
   const verifyHasSeenSearchTour = () => {
     try {
       const tourCompleted = localStorage.getItem(TOUR_COMPLETED_KEY)
-      console.log('tourCompleted >>>', tourCompleted)
       if (!tourCompleted) {
         setHasSeenSearchTour(false)
         initWizzard()
@@ -300,7 +299,6 @@ const TourSearchWizzardProvider = ({
   )
 
   useLayoutEffect(() => {
-    console.log('hasSeenSearchTour >>>', hasSeenSearchTour)
     if (!hasSeenSearchTour) {
       setTimeout(() => {
         initTour()

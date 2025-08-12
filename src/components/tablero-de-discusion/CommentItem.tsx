@@ -1,19 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { CommentProfile } from './CommentProfile'
 import { IComment } from '@/interfaces/table.interface'
 import useSession from '@/hooks/useSession'
+import GoogleIcon from '../ui/components/GoogleIcon'
+import { CommentTextArea } from './CommenTextArea'
 
 interface IProps {
   comment: IComment
   fetchComments: () => Promise<void>
+  depth?: number
 }
 
-export const CommentItem = ({ comment, fetchComments }: IProps) => {
+export const CommentItem = ({ comment, fetchComments, depth = 0 }: IProps) => {
+  const [isReplyOpen, setIsReplyOpen] = useState(false)
   const { profile } = useSession()
   const { author } = comment
   const isCommentOwner = profile?.id === author?.id
   return (
-    <div className='flex flex-col gap-2'>
+    <div className={`flex flex-col gap-2 ${depth > 0 ? 'text-sm' : ''}`}>
       <CommentProfile
         userInfo={{
           id: author?.id,
@@ -27,6 +31,30 @@ export const CommentItem = ({ comment, fetchComments }: IProps) => {
         dashboardId={comment.discussionBoard}
       />
       <p className='break-all overflow-wrap-anywhere'>{comment.content}</p>
+      <div className='flex items-center gap-2'>
+        <button
+          onClick={() => setIsReplyOpen(!isReplyOpen)}
+          className='flex text-xs text-secondary items-center gap-1 w-fit hover:text-primary transition-colors'
+        >
+          <GoogleIcon className='text-base' name='forum' />
+          <p>Responder</p>
+        </button>
+        {comment.replies && comment.replies.length > 0 && (
+          <span className='text-xs text-gray-500'>
+            {comment.replies.length}{' '}
+            {comment.replies.length === 1 ? 'respuesta' : 'respuestas'}
+          </span>
+        )}
+      </div>
+      {isReplyOpen && (
+        <div className='pb-2'>
+          <CommentTextArea
+            dashboardId={comment.discussionBoard}
+            parentId={comment.id}
+            onSuccess={() => setIsReplyOpen(false)}
+          />
+        </div>
+      )}
     </div>
   )
 }

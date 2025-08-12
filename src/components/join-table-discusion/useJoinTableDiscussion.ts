@@ -1,61 +1,54 @@
 import {
-  postDiscussionBoard,
   addComponentToDiscussionBoard,
+  postComment,
 } from '@/app/services/boards.services'
 import { useForm } from '@/hooks/useForm'
 import useMatchWindowQuery from '@/hooks/useMatchWindowQuery'
 import useSession from '@/hooks/useSession'
-import { useCreateDiscussionStore } from '@/store/creacion-tablero/creacion-tablero-store'
 import { useUIStore } from '@/store/ui/ui-store'
 import { useEffect, useState } from 'react'
 import toast from '../ui/toast/toast'
+import { useJoinBoardStore } from '@/store/unirse-tablero/unirse-tablero-store'
 
-const boardData = localStorage.getItem('createBoardData')
+const boardData = localStorage.getItem('joinBoardDiscussion')
 const parsedBoardData = boardData ? JSON.parse(boardData) : null
 const INITIAL_FORM = parsedBoardData
-  ? { name: parsedBoardData.name, description: parsedBoardData.description }
-  : { name: '', description: '' }
-const FORM_VALIDATIONS = {
-  name: [(name: string) => name.length > 0, 'El nombre es obligatorio'],
-}
-export const useTableDiscussion = () => {
+  ? { comment: parsedBoardData.comment }
+  : { comment: '' }
+
+export const useJoinTableDiscussion = () => {
   const { authUser, isLogin, profile } = useSession()
   const setIsAuthModalOpen = useUIStore((state) => state.setIsAuthModalOpen)
   const setStartAddBoardAnimation = useUIStore(
     (state) => state.setStartAddBoardAnimation
   )
-  const {
-    formValidation,
-    formState,
-    isFormValid,
-    onInputTextChange,
-    onChangeValue,
-  } = useForm(INITIAL_FORM, FORM_VALIDATIONS)
+  const { formState, onChangeValue } = useForm(INITIAL_FORM)
   const { isMD } = useMatchWindowQuery()
-  const [showErrors, setShowErrors] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const { name, description } = formState
-  const { selectedComponents, setSelectedComponents } =
-    useCreateDiscussionStore()
-  const isOpen = useUIStore((state) => state.isCreateBoardModalOpen)
-  const closeCreateBoardModal = useUIStore(
-    (state) => state.closeCreateBoardModal
+  const { comment } = formState
+  const {
+    selectedComponents,
+    setSelectedComponents,
+    boardComponents,
+    dashBoardId,
+  } = useJoinBoardStore()
+  const isOpen = useUIStore((state) => state.isJoinBoardModalOpen)
+  const setIsJoinBoardModalOpen = useUIStore(
+    (state) => state.setIsJoinBoardModalOpen
   )
-
+  const closeJoinBoardModal = () => {
+    setIsJoinBoardModalOpen(false)
+  }
   const saveOnLocalStorage = () => {
     localStorage.setItem(
-      'createBoardData',
-      JSON.stringify({ selectedComponents, description, name })
+      'joinBoardDiscussion',
+      JSON.stringify({ selectedComponents, comment })
     )
   }
   const onSubmit = async () => {
-    setShowErrors(true)
-    if (!isFormValid) {
-      return
-    }
     if (!isLogin) {
       saveOnLocalStorage()
-      closeCreateBoardModal()
+      closeJoinBoardModal()
       setIsAuthModalOpen(true)
       toast({
         type: 'warning',
@@ -65,11 +58,10 @@ export const useTableDiscussion = () => {
     }
     setIsLoading(true)
 
-    const response = await postDiscussionBoard({
-      name,
-      description,
+    const response = await postComment({
+      comment,
       token: authUser?.token || '',
-      adminId: profile?.id ?? '',
+      dashboardId: dashBoardId ?? '',
     })
     if (response.error || response.isSuccess === false) {
       setIsLoading(false)
@@ -123,10 +115,10 @@ export const useTableDiscussion = () => {
       `${window.location.origin}/tableros-de-discusion/${boardId}`,
       '_blank'
     )
-    closeCreateBoardModal()
+    closeJoinBoardModal()
   }
   const onClickAddComponent = () => {
-    closeCreateBoardModal()
+    closeJoinBoardModal()
     setStartAddBoardAnimation(true)
     setTimeout(() => {
       setStartAddBoardAnimation(false)
@@ -135,24 +127,20 @@ export const useTableDiscussion = () => {
   useEffect(() => {
     if (parsedBoardData) {
       setSelectedComponents(parsedBoardData.selectedComponents)
-      localStorage.removeItem('createBoardData')
+      localStorage.removeItem('joinBoardDiscussion')
     }
   }, [parsedBoardData])
 
   return {
-    closeCreateBoardModal,
+    closeJoinBoardModal,
     onChangeValue,
-    onInputTextChange,
     onSubmit,
     onClickAddComponent,
-    description,
-    formValidation,
-    isFormValid,
+    comment,
     isLoading,
     isMD,
     isOpen,
-    name,
     selectedComponents,
-    showErrors,
+    boardComponents,
   }
 }

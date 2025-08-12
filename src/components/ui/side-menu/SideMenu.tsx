@@ -86,6 +86,16 @@ export const SideMenu = () => {
           <IoTicketOutline size={30} />
           <span className='ml-3'>Tableros de discusión </span>
         </Link>
+        <Link
+          href='/chat-ia'
+          onClick={closeMenu}
+          className='flex items-center p-2 hover:bg-gray-100 rounded transition-all '
+        >
+          <div className='w-[30px] h-[30px] bg-blue rounded-full flex items-center justify-center'>
+            <span className='text-white text-sm font-bold'>IA</span>
+          </div>
+          <span className='ml-3'>Chat IA</span>
+        </Link>
       </div>
       <div className='border-t w-full p-4'>
         {isLogin ? (

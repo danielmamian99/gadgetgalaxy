@@ -5,13 +5,22 @@ import { ITableInfo } from '@/interfaces/table.interface'
 import { IUser } from '@/interfaces/profile.interface'
 import { IComponent } from '@/interfaces/product.interface'
 import { ProductGrid } from '../products/product-grid/ProductGrid'
+import { useJoinBoardInit } from '@/hooks/useJoinBoardInit'
 
 interface IProps {
   tableInfo: ITableInfo
   ownerInfo: IUser
   components: IComponent[]
 }
-export const TableInfo = ({ tableInfo, ownerInfo, components }: IProps) => {
+export const TableInfo = ({
+  tableInfo,
+  ownerInfo,
+  components: componentsProp,
+}: IProps) => {
+  const components = componentsProp.map((component) => ({
+    ...component,
+    stockNumber: component.stockNumber - component.quantity,
+  }))
   return (
     <div className='flex flex-col gap-2  md:pb-6 border-b-2 border-surface-strokes'>
       <UserProfile

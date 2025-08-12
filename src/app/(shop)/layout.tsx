@@ -26,6 +26,14 @@ const CreateTableDiscussion = dynamic(
     ssr: false,
   }
 )
+const JoinTableDiscussion = dynamic(
+  async () =>
+    (await import('@/components/join-table-discusion/JoinTableDiscussion'))
+      .JoinTableDiscussion,
+  {
+    ssr: false,
+  }
+)
 
 export default function ShopLayout({
   children,
@@ -38,9 +46,10 @@ export default function ShopLayout({
       <ToastProvider />
       <AuthModal />
       <CreateTableDiscussion />
+      <JoinTableDiscussion />
       <TopMenu />
       <Sidebar />
-      <div className='px-6 sm:px-10'>{children}</div>
+      {children}
     </main>
   )
 }

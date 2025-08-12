@@ -10,6 +10,7 @@ import { ButtonProfile } from './ButtonProfile'
 import { GoogleIcon } from '../components'
 import useSession from '@/hooks/useSession'
 import { useMatchWindowQuery } from '@/hooks'
+import { useJoinBoardStore } from '@/store/unirse-tablero/unirse-tablero-store'
 
 export const TopMenu = () => {
   const { isMD } = useMatchWindowQuery()
@@ -17,7 +18,13 @@ export const TopMenu = () => {
   const openSideMenu = useUIStore((state) => state.openSideMenu)
   const setIsAuthModalOpen = useUIStore((state) => state.setIsAuthModalOpen)
   const openCreateBoardModal = useUIStore((state) => state.openCreateBoardModal)
+  const setIsJoinBoardModalOpen = useUIStore(
+    (state) => state.setIsJoinBoardModalOpen
+  )
   const selectedComponents = useCreateDiscussionStore(
+    (state) => state.selectedComponents
+  )
+  const selectedComponentsJoinBoard = useJoinBoardStore(
     (state) => state.selectedComponents
   )
 
@@ -27,9 +34,19 @@ export const TopMenu = () => {
       return 'components'
     } else if (path.includes('/tableros-de-discusion')) {
       return 'tableros'
+    } else if (path.includes('/chat-ia')) {
+      return 'chat-ia'
     }
     return ''
   }
+
+  const isInSpecificBoard = () => {
+    // Verificar si está en un tablero específico (con slug)
+    const boardPathPattern = /^\/tableros-de-discusion\/[a-f0-9-]+$/
+    return boardPathPattern.test(path)
+  }
+
+  const isBoardPage = isInSpecificBoard()
   const showSection = getShowSection()
   return (
     <nav className='fixed top-0 flex px-5 justify-between items-center w-full py-2 border-b border-surface-strokes bg-white z-[1]'>
@@ -67,22 +84,51 @@ export const TopMenu = () => {
             )}
           />
         </Link>
+        <Link
+          className='m-2 p-2 rounded-md transition-all hover:bg-gray-100 relative'
+          href='/chat-ia'
+        >
+          Chat IA
+          <div
+            className={composeClasses(
+              'absolute left-0 -bottom-3 w-full bg-black h-1 transition-all',
+              showSection === 'chat-ia' ? 'opacity-100' : 'opacity-0'
+            )}
+          />
+        </Link>
       </div>
 
       <div className='flex gap-1 md:gap-2 items-center'>
-        <Button
-          size='sm'
-          className='font-semibold flex md:hidden !p-2 !w-8 !h-8 relative'
-          onClick={(e) => openCreateBoardModal()}
-          dataTour='create-board-mobile'
-        >
-          <GoogleIcon className='text-xl' name='table' />
-          {selectedComponents.length > 0 && (
-            <div className='absolute top-0 right-0 rounded-full w-4 h-4 text-xs bg-notif-red'>
-              {selectedComponents.length}
-            </div>
-          )}
-        </Button>
+        {isBoardPage ? (
+          <Button
+            size='sm'
+            className='font-semibold flex md:hidden !p-2 !w-8 !h-8 relative'
+            onClick={(e) => setIsJoinBoardModalOpen(true)}
+            dataTour='join-board-mobile'
+          >
+            <GoogleIcon className='text-xl' name='table' />
+            {selectedComponentsJoinBoard.length > 0 && (
+              <div className='absolute top-0 right-0 rounded-full w-4 h-4 text-xs bg-notif-red'>
+                {selectedComponentsJoinBoard.length}
+              </div>
+            )}
+          </Button>
+        ) : (
+          <Button
+            size='sm'
+            className='font-semibold flex md:hidden !p-2 !w-8 !h-8 relative'
+            onClick={(e) => openCreateBoardModal()}
+            dataTour='create-board-mobile'
+          >
+            <GoogleIcon className='text-xl' name='table' />
+            {selectedComponents.length > 0 && (
+              <div className='absolute top-0 right-0 rounded-full w-4 h-4 text-xs bg-notif-red'>
+                {selectedComponents.length}
+              </div>
+            )}
+          </Button>
+        )}
+
         <button
           data-tour='menu-hamburguesa'
           onClick={() => openSideMenu()}
@@ -90,20 +136,38 @@ export const TopMenu = () => {
         >
           <GoogleIcon name='menu' />
         </button>
-        <Button
-          size='sm'
-          className='font-semibold hidden md:flex h-[42px] whitespace-nowrap relative'
-          onClick={(e) => openCreateBoardModal()}
-          dataTour='create-board'
-          id='create-board'
-        >
-          Crear tablero de discusión
-          {selectedComponents.length > 0 && (
-            <div className='absolute top-0 right-0 rounded-full w-5 h-5 bg-notif-red'>
-              {selectedComponents.length}
-            </div>
-          )}
-        </Button>
+        {isBoardPage ? (
+          <Button
+            size='sm'
+            className='font-semibold hidden md:flex h-[42px] whitespace-nowrap relative'
+            onClick={(e) => setIsJoinBoardModalOpen(true)}
+            dataTour='join-board'
+            id='join-board'
+          >
+            Unirme al pedido
+            {selectedComponentsJoinBoard.length > 0 && (
+              <div className='absolute top-0 right-0 rounded-full w-5 h-5 bg-notif-red'>
+                {selectedComponentsJoinBoard.length}
+              </div>
+            )}
+          </Button>
+        ) : (
+          <Button
+            size='sm'
+            className='font-semibold hidden md:flex h-[42px] whitespace-nowrap relative'
+            onClick={(e) => openCreateBoardModal()}
+            dataTour='create-board'
+            id='create-board'
+          >
+            Crear tablero de discusión
+            {selectedComponents.length > 0 && (
+              <div className='absolute top-0 right-0 rounded-full w-5 h-5 bg-notif-red'>
+                {selectedComponents.length}
+              </div>
+            )}
+          </Button>
+        )}
+
         {isLogin && profile && isMD ? (
           <ButtonProfile user={profile} />
         ) : (

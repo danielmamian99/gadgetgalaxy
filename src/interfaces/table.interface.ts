@@ -23,6 +23,8 @@ export interface IComment {
   author: IUserOwnerTable
   content: string
   discussionBoard: string
+  parent?: string
+  replies?: IComment[]
 }
 
 export interface ITableData {

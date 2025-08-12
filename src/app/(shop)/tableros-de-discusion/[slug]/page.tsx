@@ -25,7 +25,6 @@ export default async function DiscussionBoardPage({
   if (!isSuccess || !data) {
     return <PageNotFound />
   }
-
   const {
     nombre,
     description,
@@ -45,20 +44,26 @@ export default async function DiscussionBoardPage({
     : []
 
   return (
-    <div className='flex flex-col gap-6 my-6 p-6 bg-white rounded-xl'>
-      {/* Información del tablero */}
-      <TableInfo
-        tableInfo={{
-          id,
-          nombre,
-          description,
-          createdAt: formatIsoToCustom(createdAt),
-        }}
-        ownerInfo={users?.find((user: any) => user.id === admin)}
-        components={mergedComponents}
-      />
+    <div className='px-6 sm:px-10'>
+      <div className='flex flex-col gap-6 my-6 p-6 bg-white rounded-xl'>
+        {/* Información del tablero */}
+        <TableInfo
+          tableInfo={{
+            id,
+            nombre,
+            description,
+            createdAt: formatIsoToCustom(createdAt),
+          }}
+          ownerInfo={users?.find((user: any) => user.id === admin)}
+          components={mergedComponents}
+        />
 
-      <CommentsGrid dashboardId={slug} comments={messages} />
+        <CommentsGrid
+          dashboardId={slug}
+          comments={messages}
+          components={mergedComponents}
+        />
+      </div>
     </div>
   )
 }

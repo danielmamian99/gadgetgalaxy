@@ -5,6 +5,7 @@ interface State {
   isAuthModalOpen: boolean
   isSideMenuOpen: boolean
   isCreateBoardModalOpen: boolean
+  isJoinBoardModalOpen: boolean
   startAddBoardAnimation: boolean
   setStartAddBoardAnimation: (start: boolean) => void
   setIsAuthModalOpen: (isOpen: boolean) => void
@@ -13,6 +14,7 @@ interface State {
   closeSideMenu: () => void
   openCreateBoardModal: () => void
   closeCreateBoardModal: () => void
+  setIsJoinBoardModalOpen: (isOpen: boolean) => void
 }
 
 export const useUIStore = create<State>((set) => ({
@@ -21,6 +23,7 @@ export const useUIStore = create<State>((set) => ({
   isCreateBoardModalOpen: false,
   isDeleteModalOpen: false,
   startAddBoardAnimation: false,
+  isJoinBoardModalOpen: false,
   setStartAddBoardAnimation: (start: boolean) =>
     set({ startAddBoardAnimation: start }),
   openSideMenu: () => set({ isSideMenuOpen: true }),
@@ -29,4 +32,6 @@ export const useUIStore = create<State>((set) => ({
   setIsDeleteModalOpen: (isOpen: boolean) => set({ isDeleteModalOpen: isOpen }),
   openCreateBoardModal: () => set({ isCreateBoardModalOpen: true }),
   closeCreateBoardModal: () => set({ isCreateBoardModalOpen: false }),
+  setIsJoinBoardModalOpen: (isOpen: boolean) =>
+    set({ isJoinBoardModalOpen: isOpen }),
 }))

@@ -22,5 +22,9 @@ export default async function TablesPage({ searchParams }: IProps) {
   ) {
     return <div>error</div>
   }
-  return <TablesOfDiscussion page={page} data={dataBoards?.data} />
+  return (
+    <div className='px-6 sm:px-10'>
+      <TablesOfDiscussion page={page} data={dataBoards?.data} />
+    </div>
+  )
 }

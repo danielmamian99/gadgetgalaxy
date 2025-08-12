@@ -6,9 +6,16 @@ import { useAuthModal } from '@/hooks/useAuthModal'
 import useSession from '@/hooks/useSession'
 import { postComment } from '@/app/services/boards.services'
 import { useComments } from './useComments'
-import { Portal } from '../ui/portal'
 
-export const CommentTextArea = ({ dashboardId }: { dashboardId: string }) => {
+export const CommentTextArea = ({
+  dashboardId,
+  parentId,
+  onSuccess,
+}: {
+  dashboardId: string
+  parentId?: string
+  onSuccess?: () => void
+}) => {
   const {
     fetchComments,
     setIsLoadingAdd,
@@ -36,6 +43,7 @@ export const CommentTextArea = ({ dashboardId }: { dashboardId: string }) => {
       dashboardId,
       comment: description,
       token: authUser?.token ?? '',
+      parentId,
     })
     if (response.error) {
       setError('Error al enviar el comentario')
@@ -44,6 +52,7 @@ export const CommentTextArea = ({ dashboardId }: { dashboardId: string }) => {
       await fetchComments()
       setDescription('')
       setError('')
+      onSuccess?.()
     }
   }
   return (

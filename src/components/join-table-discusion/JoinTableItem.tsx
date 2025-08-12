@@ -3,19 +3,19 @@ import Image from 'next/image'
 import { ITableItem } from '@/interfaces/table.interface'
 import QuantitySelectorV2 from '../ui/quantity-selector/QuantitySelectorV2'
 import { composeClasses } from '@/app/utils/classes'
-import { useCreateDiscussionStore } from '@/store/creacion-tablero/creacion-tablero-store'
 import { GoogleIcon } from '../ui/components'
-import { stringNumberFormatToSimpleNumber } from '@/app/utils/formatter-text'
 import { PriceTable } from '../price-table/PriceTable'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCalculateDiscounts } from '@/hooks/useCalculateDiscounts'
 import { formatCurrency } from '@/helpers/strings'
+import { useJoinBoardStore } from '@/store/unirse-tablero/unirse-tablero-store'
 interface IProps {
   item: ITableItem
+  boardItem?: ITableItem
 }
-export const TableItem = ({ item }: IProps) => {
+export const JoinTableItem = ({ item, boardItem }: IProps) => {
   const { updateComponentQuantity, removeComponentFromBoard } =
-    useCreateDiscussionStore()
+    useJoinBoardStore()
   const [showPriceTable, setShowPriceTable] = useState(false)
   const {
     name,
@@ -34,11 +34,14 @@ export const TableItem = ({ item }: IProps) => {
   const onRemove = () => {
     removeComponentFromBoard(id)
   }
+  const totalQuantityForDiscount = (boardItem?.quantity || 0) + quantity
+  const availableStock = stockNumber
+
   const { hasDiscount, currency, currentUnitPrice, originalUnitPrice } =
     useCalculateDiscounts({
       price,
       priceBreaks,
-      quantity,
+      quantity: totalQuantityForDiscount,
     })
 
   return (
@@ -77,7 +80,7 @@ export const TableItem = ({ item }: IProps) => {
                 onChangeInputValue={onChangeQuantity}
                 onChange={onChangeQuantity}
                 minQuantity={1}
-                maxQuantity={stockNumber}
+                maxQuantity={availableStock}
               />
             </div>
             <div className='flex flex-col gap-1 h-full'>
@@ -98,10 +101,10 @@ export const TableItem = ({ item }: IProps) => {
               <p
                 className={composeClasses(
                   'text-xs flex-1 whitespace-nowrap',
-                  quantity >= stockNumber && 'text-red-500'
+                  quantity >= availableStock && 'text-red-500'
                 )}
               >
-                Stock: {stockNumber}
+                Disponible: {availableStock}
               </p>
             </div>
           </div>
