@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { CommentTextArea } from './CommenTextArea'
 import { UserProfile } from '../profile/UserProfile'
@@ -5,7 +6,6 @@ import { ITableInfo } from '@/interfaces/table.interface'
 import { IUser } from '@/interfaces/profile.interface'
 import { IComponent } from '@/interfaces/product.interface'
 import { ProductGrid } from '../products/product-grid/ProductGrid'
-import { useJoinBoardInit } from '@/hooks/useJoinBoardInit'
 
 interface IProps {
   tableInfo: ITableInfo

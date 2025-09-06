@@ -12,7 +12,6 @@ export interface IStorageUser {
   web: string
 }
 export interface IAuthUserState {
-  user: any
   token: string
 }
 

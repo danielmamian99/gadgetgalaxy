@@ -1,6 +1,8 @@
 import {
   addComponentToDiscussionBoard,
+  addComponentToJoinDiscussionBoard,
   postComment,
+  postJoinDiscussionBoard,
 } from '@/app/services/boards.services'
 import { useForm } from '@/hooks/useForm'
 import useMatchWindowQuery from '@/hooks/useMatchWindowQuery'
@@ -9,6 +11,7 @@ import { useUIStore } from '@/store/ui/ui-store'
 import { useEffect, useState } from 'react'
 import toast from '../ui/toast/toast'
 import { useJoinBoardStore } from '@/store/unirse-tablero/unirse-tablero-store'
+import { EStatusJoinDiscussionBoard } from '@/interfaces/table.interface'
 
 const boardData = localStorage.getItem('joinBoardDiscussion')
 const parsedBoardData = boardData ? JSON.parse(boardData) : null
@@ -58,25 +61,27 @@ export const useJoinTableDiscussion = () => {
     }
     setIsLoading(true)
 
-    const response = await postComment({
-      comment,
+    const response = await postJoinDiscussionBoard({
+      discussionBoard: dashBoardId ?? '',
+      status: EStatusJoinDiscussionBoard.PENDING,
       token: authUser?.token || '',
-      dashboardId: dashBoardId ?? '',
+      message: comment,
+      userId: profile?.id || '',
     })
     if (response.error || response.isSuccess === false) {
       setIsLoading(false)
       toast({ type: 'error', title: 'Error al crear el tablero' })
       return
     }
-
     const boardId = response.data?.id
 
     const addComponentPromises = selectedComponents.map((item) =>
-      addComponentToDiscussionBoard({
-        boardId,
+      addComponentToJoinDiscussionBoard({
+        requestId: boardId,
         componentId: item.id,
         quantity: item.quantity,
         token: authUser?.token || '',
+        discussionBoardId: dashBoardId ?? '',
       })
     )
 
@@ -110,11 +115,10 @@ export const useJoinTableDiscussion = () => {
       }
     }
     setIsLoading(false)
-    toast({ type: 'success', title: 'Tablero creado con éxito' })
-    window.open(
-      `${window.location.origin}/tableros-de-discusion/${boardId}`,
-      '_blank'
-    )
+    toast({ type: 'success', title: 'Solicitud enviada con éxito' })
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
     closeJoinBoardModal()
   }
   const onClickAddComponent = () => {

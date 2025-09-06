@@ -6,7 +6,6 @@ import { formatIsoToCustom } from '@/app/utils/formatter-dates'
 import { PageNotFound } from '@/components/ui/not-found/PageNotFound'
 import { CommentsGrid } from '@/components/tablero-de-discusion/CommentsGrid'
 import { TableInfo } from '@/components/tablero-de-discusion/TableInfo'
-
 interface IProductPageProps {
   params: { slug: string }
 }
@@ -19,9 +18,8 @@ export default async function DiscussionBoardPage({
   const { isSuccess, data } = await getDiscussionBoardById(slug)
   const componentsRes = await getDiscussionBoardComponents(slug)
   const componentsNum = componentsRes.isSuccess
-    ? componentsRes.data.results
+    ? componentsRes.data.components
     : []
-
   if (!isSuccess || !data) {
     return <PageNotFound />
   }
@@ -42,7 +40,6 @@ export default async function DiscussionBoardPage({
         return { ...comp, quantity: found ? found.quantity : 1 }
       })
     : []
-
   return (
     <div className='px-6 sm:px-10'>
       <div className='flex flex-col gap-6 my-6 p-6 bg-white rounded-xl'>
@@ -55,7 +52,7 @@ export default async function DiscussionBoardPage({
             createdAt: formatIsoToCustom(createdAt),
           }}
           ownerInfo={users?.find((user: any) => user.id === admin)}
-          components={mergedComponents}
+          components={componentsNum}
         />
 
         <CommentsGrid
