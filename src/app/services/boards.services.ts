@@ -73,10 +73,12 @@ export const addComponentToDiscussionBoard = async ({
   componentId,
   quantity,
   token,
+  request,
 }: {
   boardId: string
   componentId: number
   quantity: number
+  request: string
   token: string
 }) => {
   try {
@@ -91,6 +93,7 @@ export const addComponentToDiscussionBoard = async ({
         component: componentId,
         quantity,
         type: 'initial',
+        request: request,
       }),
     })
     const data = await response.json()
@@ -190,8 +193,80 @@ export const getComments = async (dashboardId: string) => {
 export const getDiscussionBoardComponents = async (boardId: string) => {
   try {
     const response = await fetch(
-      `${URL}/discussion-board-components/?discussion_board=${boardId}`
+      `${URL}/discussion-boards/${boardId}/consolidated/`
     )
+    const data = await response.json()
+    return { isSuccess: response.ok, data }
+  } catch (error) {
+    return { isSuccess: false, error }
+  }
+}
+
+export const getUsersConsolidated = async (boardId: string) => {
+  const url = `${URL}/discussion-boards/${boardId}/users-consolidated/`
+  try {
+    const response = await fetchServer(url)
+    return { isSuccess: true, data: snakeToCamel(response) }
+  } catch (error) {
+    console.error('Error fetching users consolidated:', error)
+    return { isSuccess: false, error }
+  }
+}
+
+export const updateRequestState = async ({
+  requestId,
+  status,
+}: {
+  requestId: string
+  status: 'approved' | 'rejected'
+}) => {
+  try {
+    const response = await fetch(
+      `${URL}/discussion-board-requests/${requestId}/`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      }
+    )
+    const data = await response.json()
+    return { isSuccess: response.ok, data }
+  } catch (error) {
+    return { isSuccess: false, error }
+  }
+}
+
+export const postDiscussionBoardRequest = async ({
+  comment,
+  token,
+  dashboardId,
+  components,
+  userId,
+  userName,
+}: {
+  comment: string
+  token: string
+  dashboardId: string
+  components: any[]
+  userId: string
+  userName: string
+}) => {
+  try {
+    const response = await fetch(`${URL}/discussion-board-requests/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        discussion_board: dashboardId,
+        user: userId,
+        username: userName,
+        message: comment,
+      }),
+    })
     const data = await response.json()
     return { isSuccess: response.ok, data }
   } catch (error) {

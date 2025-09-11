@@ -1,6 +1,7 @@
 import {
   getDiscussionBoardById,
   getDiscussionBoardComponents,
+  getUsersConsolidated,
 } from '@/app/services/boards.services'
 import { formatIsoToCustom } from '@/app/utils/formatter-dates'
 import { PageNotFound } from '@/components/ui/not-found/PageNotFound'
@@ -18,9 +19,14 @@ export default async function DiscussionBoardPage({
 
   const { isSuccess, data } = await getDiscussionBoardById(slug)
   const componentsRes = await getDiscussionBoardComponents(slug)
+  const usersConsolidatedRes = await getUsersConsolidated(slug)
   const componentsNum = componentsRes.isSuccess
     ? componentsRes.data.results
     : []
+  const usersConsolidated =
+    usersConsolidatedRes.isSuccess && usersConsolidatedRes.data.data.users
+      ? usersConsolidatedRes.data.data.users
+      : []
 
   if (!isSuccess || !data) {
     return <PageNotFound />
@@ -36,13 +42,6 @@ export default async function DiscussionBoardPage({
     components,
   } = data.data
 
-  const mergedComponents = Array.isArray(components)
-    ? components.map((comp: any) => {
-        const found = componentsNum.find((c: any) => c.component === comp.id)
-        return { ...comp, quantity: found ? found.quantity : 1 }
-      })
-    : []
-
   return (
     <div className='px-6 sm:px-10'>
       <div className='flex flex-col gap-6 my-6 p-6 bg-white rounded-xl'>
@@ -55,13 +54,14 @@ export default async function DiscussionBoardPage({
             createdAt: formatIsoToCustom(createdAt),
           }}
           ownerInfo={users?.find((user: any) => user.id === admin)}
-          components={mergedComponents}
+          components={componentsRes.data.components}
+          usersConsolidated={usersConsolidated}
         />
 
         <CommentsGrid
           dashboardId={slug}
           comments={messages}
-          components={mergedComponents}
+          components={componentsRes.data.components}
         />
       </div>
     </div>

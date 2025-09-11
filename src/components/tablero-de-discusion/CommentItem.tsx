@@ -29,6 +29,9 @@ export const CommentItem = ({ comment, fetchComments, depth = 0 }: IProps) => {
         date={comment.createdAt}
         commentId={comment.id}
         dashboardId={comment.discussionBoard}
+        comment={comment}
+        //@ts-ignore
+        request={comment.request}
       />
       <p className='break-all overflow-wrap-anywhere'>{comment.content}</p>
       <div className='flex items-center gap-2'>

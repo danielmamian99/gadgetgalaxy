@@ -85,6 +85,7 @@ export const useTableDiscussion = () => {
         componentId: item.id,
         quantity: item.quantity,
         token: authUser?.token || '',
+        request: null,
       })
     )
 

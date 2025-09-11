@@ -8,14 +8,19 @@ export interface IGadgetgalaxyComponents {
 export interface IComponent {
   id: number
   proveedor: IProveedor
+  proveedor_name: string
+  price_breaks: string
   url: string
   referencia: string
   precio: string
   nombre: EResultName
   imageUrl: string
+  image_url: string
   datasheetUrl: string
+  datasheet_url: string
   priceBreaks: string
   stockNumber: number
+  stock_number: number
   quantity: number
 }
 

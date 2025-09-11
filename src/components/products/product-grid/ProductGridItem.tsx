@@ -18,9 +18,10 @@ import { useJoinBoardStore } from '@/store/unirse-tablero/unirse-tablero-store'
 
 interface IProps {
   product: IComponent
+  isPresentation?: boolean
 }
 
-export const ProductGridItem = ({ product }: IProps) => {
+export const ProductGridItem = ({ product, isPresentation }: IProps) => {
   const startAddBoardAnimation = useUIStore(
     (state) => state.startAddBoardAnimation
   )
@@ -51,10 +52,13 @@ export const ProductGridItem = ({ product }: IProps) => {
     datasheetUrl,
     proveedor,
     priceBreaks,
-    stockNumber,
+    stockNumber: stockNumberProp,
   } = product
-  const priceBreaksArray = parsePriceBreaks(priceBreaks)
-  const hasDatasheet = Boolean(datasheetUrl) && datasheetUrl !== 'N/A'
+  const stockNumber = stockNumberProp || product.stock_number
+  const priceBreaksArray = parsePriceBreaks(priceBreaks || product.price_breaks)
+  const hasDatasheet =
+    Boolean(datasheetUrl || product.datasheet_url) &&
+    ![datasheetUrl, product.datasheet_url].includes('N/A')
   const hasProveedorUrl =
     Boolean(proveedor) && proveedor.url && proveedor.url !== 'N/A'
   const { direccion, country, city, nombre: ProviderName } = proveedor ?? {}
@@ -65,7 +69,7 @@ export const ProductGridItem = ({ product }: IProps) => {
       name: product.nombre,
       price: product.precio,
       quantity: 1,
-      imageUrl: product.imageUrl,
+      imageUrl: product.imageUrl || product.image_url,
       providerName: ProviderName,
       priceBreaks: priceBreaksArray,
       stockNumber: stockNumber,
@@ -85,14 +89,13 @@ export const ProductGridItem = ({ product }: IProps) => {
       quantity: product.quantity,
     })
 
-  if (!imageUrl || imageUrl === 'N/A') return <></>
   return (
     <div
       className={`flex flex-col justify-between items-start rounded-xl overflow-hidden shadow-[0px_3px_6px_0px_rgba(34,34,34,0.16)] bg-white h-full w-fit text-sm max-h-[fit-content] min-w-[276px]`}
     >
       <Link target='blank' className='min-w-full max-h-full ' href={url}>
         <Image
-          src={imageUrl}
+          src={imageUrl || product.image_url}
           alt={nombre}
           className='w-full object-contain rounded-t-xl min-w-full max-h-[95px] border-b border-surface-strokes'
           width={150}
@@ -133,105 +136,112 @@ export const ProductGridItem = ({ product }: IProps) => {
           </div>
         )}
 
-        <div className='flex gap-2'>
-          <Button
-            isDisabled={!hasDatasheet}
-            href={datasheetUrl}
-            size='sm'
-            type='link'
-            variant='secondary'
-          >
-            Datasheet
-          </Button>
-          <div className='relative'>
+        {!isPresentation && (
+          <div className='flex gap-2'>
             <Button
-              isDisabled={!hasStock}
-              onClick={onAddComponent}
-              className={composeClasses(
-                'truncate',
-                startAddBoardAnimation
-                  ? 'brightness-100 animate-bounce duration-1000'
-                  : ''
-              )}
+              isDisabled={!hasDatasheet}
+              href={datasheetUrl || product.datasheet_url}
               size='sm'
-              dataTour='add-to-board'
+              type='link'
+              variant='secondary'
             >
-              {hasStock ? 'Agregar a tablero' : 'Cantidad máxima'}
+              Datasheet
             </Button>
-            {/* {!!product!.quantity && (
+            <div className='relative'>
+              <Button
+                isDisabled={!hasStock}
+                onClick={onAddComponent}
+                className={composeClasses(
+                  'truncate',
+                  startAddBoardAnimation
+                    ? 'brightness-100 animate-bounce duration-1000'
+                    : ''
+                )}
+                size='sm'
+                dataTour='add-to-board'
+              >
+                {hasStock ? 'Agregar a tablero' : 'Cantidad máxima'}
+              </Button>
+              {/* {!!product!.quantity && (
               <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
                 {product!.quantity}
               </div>
             )} */}
-            {isComponentInBoard && (
-              <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
-                {isComponentInBoard.quantity}
-              </div>
-            )}
+              {isComponentInBoard && (
+                <div className='absolute -top-1 -right-1 rounded-full w-5 h-5 bg-notif-red flex items-center justify-center text-white'>
+                  {isComponentInBoard.quantity}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
-      <div className='w-full h-[1px] bg-surface-strokes'></div>
 
-      <div className='flex flex-col p-[10px] gap-1 w-full'>
-        <button
-          onClick={() => setOpenProvider((prev) => !prev)}
-          className='flex items-center w-full justify-between'
-        >
-          <p>Proveedor: {ProviderName} </p>
-          {openProvider ? <SlArrowUp /> : <SlArrowDown />}
-        </button>
-        <AnimatePresence initial={false}>
-          {openProvider && (
-            <motion.div
-              key='price-table'
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              style={{ overflow: 'hidden' }}
+      {!isPresentation && (
+        <>
+          <div className='w-full h-[1px] bg-surface-strokes'></div>
+
+          <div className='flex flex-col p-[10px] gap-1 w-full'>
+            <button
+              onClick={() => setOpenProvider((prev) => !prev)}
+              className='flex items-center w-full justify-between'
             >
-              <p>{address}</p>
-              <Button
-                isDisabled={!hasProveedorUrl}
-                href={proveedor.url}
-                size='sm'
-                type='link'
-                variant='secondary'
-              >
-                {hasProveedorUrl ? 'Página del proveedor' : 'No disponible'}
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-      <div
-        data-tour='table-price'
-        className='flex flex-1 flex-col p-[10px] gap-2 w-full border-t'
-      >
-        <button
-          id='table-price-card'
-          onClick={() => setShowComunityButtons((prev) => !prev)}
-          className='flex items-center w-full justify-between'
-        >
-          <p className='truncate'>Tabla de precios</p>
-          {showComunityButtons ? <SlArrowUp /> : <SlArrowDown />}
-        </button>
-        <AnimatePresence initial={false}>
-          {showComunityButtons && (
-            <motion.div
-              key='price-table'
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              style={{ overflow: 'hidden' }}
+              <p>Proveedor: {ProviderName || product.proveedor_name} </p>
+              {openProvider ? <SlArrowUp /> : <SlArrowDown />}
+            </button>
+            <AnimatePresence initial={false}>
+              {openProvider && (
+                <motion.div
+                  key='price-table'
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <p>{address}</p>
+                  <Button
+                    isDisabled={!hasProveedorUrl}
+                    href={proveedor.url}
+                    size='sm'
+                    type='link'
+                    variant='secondary'
+                  >
+                    {hasProveedorUrl ? 'Página del proveedor' : 'No disponible'}
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <div
+            data-tour='table-price'
+            className='flex flex-1 flex-col p-[10px] gap-2 w-full border-t'
+          >
+            <button
+              id='table-price-card'
+              onClick={() => setShowComunityButtons((prev) => !prev)}
+              className='flex items-center w-full justify-between'
             >
-              <PriceTable priceBreaks={priceBreaksArray} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              <p className='truncate'>Tabla de precios</p>
+              {showComunityButtons ? <SlArrowUp /> : <SlArrowDown />}
+            </button>
+            <AnimatePresence initial={false}>
+              {showComunityButtons && (
+                <motion.div
+                  key='price-table'
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <PriceTable priceBreaks={priceBreaksArray} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </>
+      )}
     </div>
   )
 }

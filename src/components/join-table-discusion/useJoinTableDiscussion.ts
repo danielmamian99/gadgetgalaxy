@@ -1,6 +1,7 @@
 import {
   addComponentToDiscussionBoard,
-  postComment,
+  // postComment,
+  postDiscussionBoardRequest,
 } from '@/app/services/boards.services'
 import { useForm } from '@/hooks/useForm'
 import useMatchWindowQuery from '@/hooks/useMatchWindowQuery'
@@ -58,25 +59,29 @@ export const useJoinTableDiscussion = () => {
     }
     setIsLoading(true)
 
-    const response = await postComment({
+    const response = await postDiscussionBoardRequest({
       comment,
       token: authUser?.token || '',
       dashboardId: dashBoardId ?? '',
+      components: selectedComponents,
+      userId: profile?.id ?? '',
+      userName: profile?.username ?? '',
     })
     if (response.error || response.isSuccess === false) {
       setIsLoading(false)
-      toast({ type: 'error', title: 'Error al crear el tablero' })
+      toast({ type: 'error', title: 'Error al crear la solicitud' })
       return
     }
 
-    const boardId = response.data?.id
+    const requestId = response.data?.id
 
     const addComponentPromises = selectedComponents.map((item) =>
       addComponentToDiscussionBoard({
-        boardId,
+        boardId: null,
         componentId: item.id,
         quantity: item.quantity,
         token: authUser?.token || '',
+        request: requestId,
       })
     )
 
@@ -100,19 +105,19 @@ export const useJoinTableDiscussion = () => {
       if (successful === 0) {
         toast({
           type: 'error',
-          title: 'Error al agregar componentes al tablero',
+          title: 'Error al agregar componentes a la solicitud',
         })
       } else {
         toast({
           type: 'warning',
-          title: `Tablero creado, pero ${failed} componente(s) no se pudieron agregar`,
+          title: `Solicitud creada, pero ${failed} componente(s) no se pudieron asociar`,
         })
       }
     }
     setIsLoading(false)
-    toast({ type: 'success', title: 'Tablero creado con éxito' })
+    toast({ type: 'success', title: 'Solicitud enviada con éxito' })
     window.open(
-      `${window.location.origin}/tableros-de-discusion/${boardId}`,
+      `${window.location.origin}/tableros-de-discusion/${dashBoardId}`,
       '_blank'
     )
     closeJoinBoardModal()
