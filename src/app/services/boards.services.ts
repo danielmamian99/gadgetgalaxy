@@ -1,3 +1,4 @@
+import { EStatusJoinDiscussionBoard } from '@/interfaces/table.interface'
 import { fetchServer, snakeToCamel } from '../utils/fetch-server'
 
 interface IProps {
@@ -68,6 +69,45 @@ export const postDiscussionBoard = async ({
   }
 }
 
+export const postJoinDiscussionBoard = async ({
+  discussionBoard,
+  status,
+  token,
+  message,
+  userId,
+}: {
+  discussionBoard: string
+  status: EStatusJoinDiscussionBoard
+  token: string
+  message: string
+  userId: string
+}) => {
+  try {
+    const response = await fetch(`${URL}/discussion-board-requests/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status,
+        message: message,
+        discussion_board: discussionBoard,
+        user: userId,
+      }),
+    })
+
+    const data = await response.json()
+    return {
+      isSuccess: response.ok,
+      data: { ...data, status: response.status },
+    }
+  } catch (error) {
+    console.error('Error during login:', error)
+    return { isSuccess: false, error }
+  }
+}
+
 export const addComponentToDiscussionBoard = async ({
   boardId,
   componentId,
@@ -103,6 +143,40 @@ export const addComponentToDiscussionBoard = async ({
   }
 }
 
+export const addComponentToJoinDiscussionBoard = async ({
+  discussionBoardId,
+  requestId,
+  componentId,
+  quantity,
+  token,
+}: {
+  discussionBoardId: string
+  requestId: string
+  componentId: number
+  quantity: number
+  token: string
+}) => {
+  try {
+    const response = await fetch(`${URL}/discussion-board-components/create/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        discussion_board: discussionBoardId,
+        request: requestId,
+        component: componentId,
+        quantity,
+        type: 'request',
+      }),
+    })
+    const data = await response.json()
+    return { isSuccess: response.ok, data }
+  } catch (error) {
+    return { isSuccess: false, error }
+  }
+}
 export const postComment = async ({
   dashboardId,
   comment,
@@ -189,6 +263,18 @@ export const getComments = async (dashboardId: string) => {
   }
 }
 
+// Obtener componentes y cantidades de un discussion board
+// export const getDiscussionBoardComponents = async (boardId: string) => {
+//   try {
+//     const response = await fetch(
+//       `${URL}/discussion-board-components/?discussion_board=${boardId}`
+//     )
+//     const data = await response.json()
+//     return { isSuccess: response.ok, data }
+//   } catch (error) {
+//     return { isSuccess: false, error }
+//   }
+// }
 // Obtener componentes y cantidades de un discussion board
 export const getDiscussionBoardComponents = async (boardId: string) => {
   try {

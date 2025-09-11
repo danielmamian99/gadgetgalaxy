@@ -45,7 +45,6 @@ export const Products = ({ dataComponents, page }: IProps) => {
     }, 500),
     []
   )
-  console.log('dataComponents >>>', dataComponents)
   // Update search query and trigger debounced fetch
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value

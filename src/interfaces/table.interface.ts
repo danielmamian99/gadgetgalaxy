@@ -48,3 +48,9 @@ export interface ITableItem {
   priceBreaks: IPriceBreak[]
   stockNumber: number
 }
+
+export enum EStatusJoinDiscussionBoard {
+  PENDING = 'pending',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
+}

@@ -84,7 +84,7 @@ export const JoinTableDiscussion = () => {
           size='sm'
           className='font-semibold h-[42px]'
         >
-          {isLoading ? 'Cargando...' : 'Crear'}
+          {isLoading ? 'Cargando...' : 'Unirme'}
         </Button>
       </div>
     </SidebarComponent>

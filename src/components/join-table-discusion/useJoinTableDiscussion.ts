@@ -10,6 +10,7 @@ import { useUIStore } from '@/store/ui/ui-store'
 import { useEffect, useState } from 'react'
 import toast from '../ui/toast/toast'
 import { useJoinBoardStore } from '@/store/unirse-tablero/unirse-tablero-store'
+import { EStatusJoinDiscussionBoard } from '@/interfaces/table.interface'
 
 const boardData = localStorage.getItem('joinBoardDiscussion')
 const parsedBoardData = boardData ? JSON.parse(boardData) : null
