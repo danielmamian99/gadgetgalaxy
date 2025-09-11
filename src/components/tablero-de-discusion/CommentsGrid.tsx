@@ -12,11 +12,13 @@ interface IProps {
   comments: IComment[]
   dashboardId: string
   components: IComponent[]
+  adminId?: string
 }
 export const CommentsGrid = ({
   components,
   comments: commentsProps,
   dashboardId,
+  adminId,
 }: IProps) => {
   const { comments, isLoadingAdd, isLoadingComments, fetchComments } =
     useComments({
@@ -37,6 +39,7 @@ export const CommentsGrid = ({
             key={comment.id}
             fetchComments={fetchComments}
             comment={comment}
+            adminId={adminId}
           />
           {index !== processedComments.length - 1 && (
             <Divider className='w-full h-1' />

@@ -41,10 +41,11 @@ export default async function DiscussionBoardPage({
     components,
   } = data.data
 
+  console.log(admin)
+
   return (
     <div className='px-6 sm:px-10'>
       <div className='flex flex-col gap-6 my-6 p-6 bg-white rounded-xl'>
-        {/* Información del tablero */}
         <TableInfo
           tableInfo={{
             id,
@@ -61,6 +62,7 @@ export default async function DiscussionBoardPage({
           dashboardId={slug}
           comments={messages}
           components={componentsRes.data.components}
+          adminId={admin}
         />
       </div>
     </div>

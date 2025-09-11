@@ -117,10 +117,7 @@ export const useJoinTableDiscussion = () => {
     }
     setIsLoading(false)
     toast({ type: 'success', title: 'Solicitud enviada con éxito' })
-    window.open(
-      `${window.location.origin}/tableros-de-discusion/${dashBoardId}`,
-      '_blank'
-    )
+    window.location.reload()
     closeJoinBoardModal()
   }
   const onClickAddComponent = () => {

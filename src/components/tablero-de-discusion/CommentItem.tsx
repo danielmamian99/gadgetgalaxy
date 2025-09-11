@@ -9,13 +9,19 @@ interface IProps {
   comment: IComment
   fetchComments: () => Promise<void>
   depth?: number
+  adminId?: string
 }
 
-export const CommentItem = ({ comment, fetchComments, depth = 0 }: IProps) => {
+export const CommentItem = ({
+  comment,
+  fetchComments,
+  depth = 0,
+  adminId,
+}: IProps) => {
   const [isReplyOpen, setIsReplyOpen] = useState(false)
   const { profile } = useSession()
   const { author } = comment
-  const isCommentOwner = profile?.id === author?.id
+  const isCommentOwner = profile?.id === adminId
   return (
     <div className={`flex flex-col gap-2 ${depth > 0 ? 'text-sm' : ''}`}>
       <CommentProfile

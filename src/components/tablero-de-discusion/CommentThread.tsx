@@ -7,12 +7,14 @@ interface IProps {
   comment: IComment
   fetchComments: () => Promise<void>
   depth?: number
+  adminId?: string
 }
 
 export const CommentThread = ({
   comment,
   fetchComments,
   depth = 0,
+  adminId,
 }: IProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const hasReplies = comment.replies && comment.replies.length > 0
@@ -55,6 +57,7 @@ export const CommentThread = ({
             comment={comment}
             fetchComments={fetchComments}
             depth={depth}
+            adminId={adminId}
           />
         </div>
       </div>

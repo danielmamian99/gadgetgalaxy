@@ -54,6 +54,7 @@ export const CommentProfile = ({
     })
     setIsLoadingAccept(false)
     setIsAcceptModalOpen(false)
+    window.location.reload()
   }
   const handleReject = async () => {
     setIsLoadingAccept(true)
@@ -63,6 +64,7 @@ export const CommentProfile = ({
     })
     setIsLoadingAccept(false)
     setIsAcceptModalOpen(false)
+    window.location.reload()
   }
   return (
     <>
@@ -141,7 +143,7 @@ export const CommentProfile = ({
               />
             </button>
           )}
-          {request && (
+          {isCommentOwner && request && (
             <button
               onClick={onAcceptRequest}
               className='rounded-lg px-3 py-1 md:px-4 md:py-2 bg-primary text-white text-xs md:text-sm font-semibold hover:brightness-90 active:brightness-75 flex items-center justify-center'

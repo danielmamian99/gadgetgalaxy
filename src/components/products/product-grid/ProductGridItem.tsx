@@ -46,7 +46,7 @@ export const ProductGridItem = ({ product, isPresentation }: IProps) => {
   const {
     url,
     nombre,
-    imageUrl,
+    imageUrl: imageUrlProp,
     referencia,
     precio,
     datasheetUrl,
@@ -54,6 +54,7 @@ export const ProductGridItem = ({ product, isPresentation }: IProps) => {
     priceBreaks,
     stockNumber: stockNumberProp,
   } = product
+  const imageUrl = imageUrlProp || product.image_url
   const stockNumber = stockNumberProp || product.stock_number
   const priceBreaksArray = parsePriceBreaks(priceBreaks || product.price_breaks)
   const hasDatasheet =
@@ -88,6 +89,8 @@ export const ProductGridItem = ({ product, isPresentation }: IProps) => {
       priceBreaks: priceBreaksArray,
       quantity: product.quantity,
     })
+
+  if (!imageUrl || imageUrl === 'N/A') return <></>
 
   return (
     <div
