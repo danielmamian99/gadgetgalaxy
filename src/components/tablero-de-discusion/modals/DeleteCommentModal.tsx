@@ -53,7 +53,7 @@ export const DeleteCommentModal = ({
   }
   return (
     <Modal enableBgBlur onClose={onClose} isOpen={isDeleteModalOpen}>
-      <Modal.Header className='w-full flex justify-between items-center border-b border-surface strokes py-1 px-4   '>
+      <Modal.Header className='w-full flex justify-between items-center border-b border-surface strokes py-2 px-4   '>
         <p className='text-lg font-semibold'>¿Estás seguro?</p>
         <button className='rounded-xl w-8 h-8 bg-surface-strokes flex items-center justify-center'>
           <GoogleIcon name='close' className='text-primary' />
@@ -66,7 +66,7 @@ export const DeleteCommentModal = ({
         </p>
       </Modal.Body>
 
-      <Modal.Footer className='flex w-full gap-5 px-4 py-2'>
+      <Modal.Footer className='flex w-full gap-5 px-4 py-2 border-t border-surface-strokes'>
         <Button variant='terciary' size='sm' onClick={onClose}>
           Cancelar
         </Button>
