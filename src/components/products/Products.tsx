@@ -22,6 +22,8 @@ export const Products = ({ dataComponents, page }: IProps) => {
   const { formState, onInputTextChange } = useForm({
     search: '',
   })
+  const limit = 35
+  const totalPages = Math.ceil(dataComponents.count / limit)
   // Debounced function to fetch products using getComponents
   const fetchProducts = useCallback(
     debounce(async (query: string) => {
@@ -87,7 +89,7 @@ export const Products = ({ dataComponents, page }: IProps) => {
         />
       </div>
       {loading ? <ProductGridSekeleton /> : <ProductGrid products={products} />}
-      <PaginationSection defaultPage={page} totalPages={dataComponents.count} />
+      <PaginationSection defaultPage={page} totalPages={totalPages} />
     </>
   )
 }

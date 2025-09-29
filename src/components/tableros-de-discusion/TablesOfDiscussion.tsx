@@ -19,6 +19,8 @@ export const TablesOfDiscussion = ({ data, page }: IProps) => {
   const { formState, onInputTextChange } = useForm({
     search: '',
   })
+  const limit = 35
+  const totalPages = Math.ceil(data.count / limit)
   // Debounced function to fetch discussion boards
   const fetchTables = useCallback(
     debounce(async (query: string) => {
@@ -71,7 +73,7 @@ export const TablesOfDiscussion = ({ data, page }: IProps) => {
         name='search'
       />
       <TablesGrid tables={tables} />
-      <PaginationSection defaultPage={page} totalPages={data.count} />
+      <PaginationSection defaultPage={page} totalPages={totalPages} />
     </>
   )
 }
