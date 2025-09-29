@@ -37,7 +37,7 @@ export const UserOrdersSummary = ({
           {usersConsolidated.map((user) => (
             <div key={user.user_id} className='mb-6'>
               <h3 className='font-semibold text-lg mb-2'>{user.username}</h3>
-              <div style={{ zoom: 0.5 }}>
+              <div style={{ zoom: 0.8 }}>
                 <ProductGrid products={user.components} isPresentation />
               </div>
             </div>

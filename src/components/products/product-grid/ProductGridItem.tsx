@@ -108,11 +108,11 @@ export const ProductGridItem = ({ product, isPresentation }: IProps) => {
       <div className='flex gap-1 w-full flex-col p-[10px]'>
         <div className='flex gap-2'>
           <Link className='flex-1 hover:text-blue-500' href={url}>
-            <p>{nombre}</p>
-            <p>{referencia}</p>
+            <p className='truncate max-w-[180px]'>{nombre}</p>
+            <p className='truncate max-w-[180px]'>{referencia}</p>
           </Link>
           <div className='flex flex-col items-end'>
-            <span className='font-bold '>{precio}</span>
+            <span className='font-bold'>{precio}</span>
             <p>
               {hasQuantity ? 'Disponibles' : 'Stock'}:{' '}
               {stockNumber > 0 ? stockNumber : 0}
